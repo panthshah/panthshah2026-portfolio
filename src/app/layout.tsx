@@ -1,14 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Alegreya, Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Alegreya, Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Footer } from "@/components/footer/Footer";
 import { Sidebar } from "@/components/sidebar/Sidebar";
-import { idleAvatarSvg } from "@/lib/bot/idle";
+import { idleBotSrc } from "@/lib/bot/idle";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
+// Bricolage Grotesque (OFL, fontsource 5.3.0) fixed at what the statement uses: weight 500, the display cut (opsz 96),
+// Latin only. 21 KB instead of the 75 KB variable font. To add a weight, make another instance the same way.
+const bricolage = localFont({
+  src: "../assets/fonts/bricolage-500-display.woff2",
   variable: "--font-bricolage",
-  subsets: ["latin"],
-  axes: ["opsz"],
+  weight: "500",
+  display: "swap",
 });
 
 const geistSans = Geist({
@@ -16,9 +20,11 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+// small labels only (the Fold8 panel), so it isn't preloaded
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 // the footer clock's serif; it sits at the bottom of the page, so it isn't preloaded
@@ -52,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${bricolage.variable} ${geistSans.variable} ${geistMono.variable} ${alegreya.variable}`}
     >
       <body>
-        <Sidebar idleAvatar={idleAvatarSvg} />
+        <Sidebar idleAvatar={idleBotSrc("nav")} />
         {/* beside the sidebar on desktop; below that, under the fixed top bar and lined up with its avatar */}
         <main className="px-5 pt-under-bar pb-9 lg:pt-shell lg:pr-5 lg:pl-rail">{children}</main>
         <Footer />

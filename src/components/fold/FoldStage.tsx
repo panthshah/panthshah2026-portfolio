@@ -1,6 +1,12 @@
 "use client";
 
+import { getImageProps, type StaticImageData } from "next/image";
+import { preload } from "react-dom";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import pistachio from "@/assets/fold/poster-pistachio.webp";
+import lavender from "@/assets/fold/poster-lavender.webp";
+import graphite from "@/assets/fold/poster-graphite.webp";
+import cream from "@/assets/fold/poster-cream.webp";
 import { COLOURWAYS, panelTheme, type ColourId } from "./colourways";
 
 const EMBED = "/fold/index.html#embed";
@@ -9,6 +15,9 @@ const SPEC_MM = "161.4 × 123.9 × 4.5 mm";
 // the phone's size in each mode: a little smaller at rest so the bottom row clears it, life size while trying
 const REST = 1.05, LIFE = 0.93;
 const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+// renders of the live phone, served at the size the screen needs (the still box is the panel minus 2 × 16px)
+const STILLS: Record<ColourId, StaticImageData> = { pistachio, lavender, graphite, cream };
+const still = (id: ColourId) => getImageProps({ src: STILLS[id], alt: "", sizes: "calc(100vw - 80px)" }).props;
 
 type Embed = { doc: Document; win: Window & { fold8?: { zoom: (z: number) => void } } };
 
@@ -39,6 +48,10 @@ export function FoldStage() {
   const [state, setState] = useState(`Open · ${SPEC_MM}`);
 
   const theme = useMemo(() => panelTheme(colour, dark), [colour, dark]);
+
+  // phones and tablets: the still is the biggest thing on screen at load, so ask for it first (desktop never needs it)
+  const first = still("pistachio");
+  preload(first.src, { as: "image", imageSrcSet: first.srcSet, imageSizes: first.sizes, fetchPriority: "high", media: "(max-width: 1023px)" });
 
   // follow the site's Dark setting (set on <html> by the Appearance panel)
   useEffect(() => {
@@ -224,11 +237,9 @@ export function FoldStage() {
               <picture key={c.id}>
                 <source media="(min-width: 1024px)" srcSet={EMPTY_IMAGE} />
                 <img
-                  src={`/fold/poster-${c.id}.webp`}
+                  {...still(c.id)}
                   alt=""
-                  width={760}
-                  height={601}
-                  decoding="async"
+                  loading="eager"
                   fetchPriority={c.id === "pistachio" ? "high" : "auto"}
                   data-on={c.id === colour || undefined}
                   className="absolute inset-0 size-full object-contain opacity-0 transition-opacity duration-300 data-on:opacity-100"
@@ -238,7 +249,7 @@ export function FoldStage() {
           </div>
 
           {/* desktop: until the live phone has drawn */}
-          <span className="fold-loading pointer-events-none absolute inset-0 hidden place-items-center font-mono text-12 font-medium text-faint lg:grid" aria-hidden="true">
+          <span className="fold-loading pointer-events-none absolute inset-0 hidden place-items-center font-mono text-12 font-medium text-muted lg:grid" aria-hidden="true">
             Unfolding…
           </span>
 

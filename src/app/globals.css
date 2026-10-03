@@ -111,7 +111,6 @@
   /* Fonts (self-hosted by next/font in layout.tsx) */
   --font-*: initial;
   --font-title: var(--font-bricolage), system-ui, sans-serif;
-  --font-title--font-variation-settings: "opsz" 96; /* Bricolage's display cut */
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
   --font-serif: var(--font-alegreya), Georgia, serif; /* the footer clock */

@@ -3,11 +3,11 @@
 import { useEffect, useRef } from "react";
 
 /**
- * The character in the Playground tile: a still first (the idle pose, from the server), then once the tile is near
+ * The character in the Playground tile: a still first (the idle pose, a cached SVG file), then once the tile is near
  * the screen the engine (already loaded for the sidebar avatar) brings him to life. He changes mood on his own and
  * is happy when you point at his tile.
  */
-export function PlaygroundBot({ idleSvg, className }: { idleSvg: string; className?: string }) {
+export function PlaygroundBot({ idleSrc, className }: { idleSrc: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -31,5 +31,10 @@ export function PlaygroundBot({ idleSvg, className }: { idleSvg: string; classNa
     return () => { cancelled = true; io.disconnect(); destroy(); };
   }, []);
 
-  return <span ref={ref} className={className} aria-hidden="true" dangerouslySetInnerHTML={{ __html: idleSvg }} />;
+  return (
+    <span ref={ref} className={className} aria-hidden="true">
+      {/* eslint-disable-next-line @next/next/no-img-element -- a tiny static SVG; the engine replaces it with the live drawing */}
+      <img src={idleSrc} alt="" width={120} height={157} loading="lazy" className="block size-full" />
+    </span>
+  );
 }

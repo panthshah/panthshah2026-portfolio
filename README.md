@@ -63,6 +63,7 @@ The phone is a self-contained three.js page in `public/fold/` (from the prototyp
 same-origin frame by `src/components/fold/FoldStage.tsx`. It loads `three.min.js` (three 0.160.0) and Onest
 (fontsource 5.3.1, OFL) from the same folder, so it makes no third-party requests.
 
-- Desktop: the frame loads once the page is idle; phones and tablets show `poster-<colour>.webp` until **Try it**.
+- Desktop: the frame loads once the page is idle; phones and tablets show a still (`src/assets/fold/poster-<colour>.webp`,
+  served at the screen's size by next/image) until **Try it**.
 - The stills are renders of the live phone (open, `fold8.view(0.22, 0.16, 1.05)`), made with the page's
   `fold8.snapshot()` hook. If the phone changes, render them again the same way so the still and the live phone match.

@@ -19,10 +19,16 @@ export function BrushTitle({ className, pieces }: { className?: string; pieces: 
   const ref = useRef<HTMLHeadingElement>(null);
   const [split, setSplit] = useState(false);
 
+  // once the font is in and the page is idle (the split and its measuring stay out of the first paint)
   useEffect(() => {
-    let cancelled = false;
-    document.fonts.ready.then(() => { if (!cancelled) setSplit(true); });
-    return () => { cancelled = true; };
+    let cancelled = false, idleId = 0;
+    const onIdle = "requestIdleCallback" in window;
+    document.fonts.ready.then(() => {
+      if (cancelled) return;
+      const go = () => { if (!cancelled) setSplit(true); };
+      idleId = onIdle ? requestIdleCallback(go, { timeout: 2000 }) : window.setTimeout(go, 300);
+    });
+    return () => { cancelled = true; if (onIdle) cancelIdleCallback(idleId); else clearTimeout(idleId); };
   }, []);
 
   // runs before the split letters paint, so the swap is never visible

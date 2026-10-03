@@ -11,10 +11,10 @@ import { Avatar } from "./Avatar";
 const EMAIL = "panthshahdesigns@gmail.com";
 const RESUME = "/Panth%20Shah%20FT%20Resume.pdf"; // same path as the old site, so shared links keep working
 
-const NAV: { label: string; href: string; icon: IconName; react: BotState; external?: boolean }[] = [
+const NAV: { label: string; href: string; icon: IconName; react: BotState; external?: boolean; soon?: boolean }[] = [
   { label: "Work", href: "/#work", icon: "work", react: "reading" },
-  { label: "About", href: "/about", icon: "about", react: "happy" },
-  { label: "Playground", href: "/playground", icon: "play", react: "snack" },
+  { label: "About", href: "/about", icon: "about", react: "happy", soon: true },
+  { label: "Playground", href: "/playground", icon: "play", react: "snack", soon: true },
   { label: "Resume", href: RESUME, icon: "resume", react: "thinking", external: true },
 ];
 const CONTACT = [
@@ -103,7 +103,7 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
     >
       {/* who */}
       <div className="flex items-center gap-3 lg:mt-drop lg:pb-5">
-        <Avatar idleSvg={idleAvatar} />
+        <Avatar idleSrc={idleAvatar} />
         <p className="grid min-w-0 gap-0.5">
           <span className="text-16 leading-20 font-semibold text-ink">Panth Shah</span>
           <span className="text-14 leading-18 text-muted">Designer at Samsung</span>
@@ -124,12 +124,13 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
       <div id="site-menu" className="mt-3 hidden border-t border-rule in-data-open:block lg:mt-0 lg:flex lg:flex-1 lg:flex-col">
         {/* where */}
         <nav aria-label="Main" className="grid gap-0.5 pt-3">
-          {NAV.map(({ label, href, icon, react, external }) => {
+          {NAV.map(({ label, href, icon, react, external, soon }) => {
             const body: ReactNode = (<><Icon name={icon} />{label}{external && <Ext />}</>);
             return external ? (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={ROW} onClick={close} {...reacts(react)}>{body}</a>
             ) : (
-              <Link key={label} href={href} className={ROW} onClick={close} {...reacts(react)}>{body}</Link>
+              // pages still to be built aren't prefetched (a prefetch of a missing page logs a 404)
+              <Link key={label} href={href} prefetch={soon ? false : undefined} className={ROW} onClick={close} {...reacts(react)}>{body}</Link>
             );
           })}
         </nav>
@@ -143,16 +144,17 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
                 <Ext />
               </a>
             ))}
-            <button type="button" onClick={copyEmail} className={ROW} aria-label={`Copy email address (${EMAIL})`} {...reacts("hello")}>
+            <button type="button" onClick={copyEmail} className={ROW} {...reacts("hello")}>
               Email
-              <span className={`${HINT} ${copied ? "text-ink" : "text-faint"}`}>{copied ? "Copied" : "Copy"}</span>
+              <span className={`${HINT} ${copied ? "text-ink" : "text-muted"}`}>{copied ? "Copied" : "Copy"}</span>
+              <span className="sr-only">: {EMAIL}</span>
             </button>
           </div>
           {/* X-ray (hold ⌥ or press X) is wired up in its own step */}
           <button type="button" aria-pressed="false" className={`hidden ${ROW_LOOK} lg:mb-drop lg:flex`}>
             <Icon name="option" className="size-icon text-ink" />
             Hold for X-ray
-            <span className={`${HINT} text-faint`}>or press X</span>
+            <span className={`${HINT} text-muted`}>or press X</span>
           </button>
         </div>
       </div>

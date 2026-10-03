@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import { avatar } from "@/lib/bot/avatar";
 
 /**
- * The character in the sidebar. It renders as a still (the idle pose, from the server),
+ * The character in the sidebar. It renders as a still (the idle pose, a cached SVG file),
  * then the animation engine loads when the browser is idle and takes over the same SVG.
  * Rest the cursor on him for a moment and he flies off with his bamboo-copter.
  */
-export function Avatar({ idleSvg }: { idleSvg: string }) {
+export function Avatar({ idleSrc }: { idleSrc: string }) {
   const markRef = useRef<HTMLSpanElement>(null);
   const faceRef = useRef<HTMLSpanElement>(null);
 
@@ -60,11 +60,10 @@ export function Avatar({ idleSvg }: { idleSvg: string }) {
 
   return (
     <span ref={markRef} className="grid size-avatar shrink-0 place-items-center overflow-hidden rounded-full bg-avatar">
-      <span
-        ref={faceRef}
-        className="block size-full transition-opacity duration-120 in-data-away:opacity-0"
-        dangerouslySetInnerHTML={{ __html: idleSvg }}
-      />
+      <span ref={faceRef} className="block size-full transition-opacity duration-120 in-data-away:opacity-0">
+        {/* eslint-disable-next-line @next/next/no-img-element -- a tiny static SVG; the engine replaces it with the live drawing */}
+        <img src={idleSrc} alt="" width={40} height={40} className="block size-full" />
+      </span>
     </span>
   );
 }

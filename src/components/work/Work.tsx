@@ -1,6 +1,6 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
-import { idleBotSvg } from "@/lib/bot/idle";
+import { idleBotSrc } from "@/lib/bot/idle";
 import comparePf from "@/assets/work/compare-pf.jpg";
 import cody from "@/assets/work/cody.png";
 import sam from "@/assets/work/sam.png";
@@ -35,7 +35,7 @@ export function Work() {
           desc="Experiments, prototypes and things I make for fun"
           meta="Ongoing"
           mediaClass={s.play}
-          scene={<PlaygroundBot idleSvg={idleBotSvg("full")} className={`${s.bot} block`} />}
+          scene={<PlaygroundBot idleSrc={idleBotSrc("full")} className={`${s.bot} block`} />}
         />
       </LiveTiles>
     </section>
@@ -55,17 +55,22 @@ function Tile({ href, colour, title, desc, meta, scene, mediaClass = "" }: { hre
   );
 }
 
-/* ---------- the scenes (decorative: the caption carries the meaning) ---------- */
+/* ---------- the scenes (decorative: the caption carries the meaning; `inert` keeps them out of the way of
+   assistive tech and accessibility checkers, which can't tell decoration from content) ---------- */
 
 function SamsungScene() {
   return (
-    <div className={s.shot} aria-hidden="true">
-      <Image
-        src={comparePf}
+    <div className={s.shot} aria-hidden="true" inert>
+      {/* eslint-disable-next-line @next/next/no-img-element -- optimised srcset from getImageProps, no client code */}
+      <img
+        {...getImageProps({
+          src: comparePf,
+          alt: "",
+          placeholder: "blur", // a blurred preview while it loads
+          sizes: "(min-width: 1024px) calc((100vw - 332px) * 0.43), (min-width: 768px) calc((100vw - 72px) * 0.43), calc((100vw - 48px) * 0.86)",
+        }).props}
         alt=""
-        fill
-        sizes="(min-width: 1024px) calc((100vw - 332px) * 0.43), (min-width: 768px) calc((100vw - 72px) * 0.43), calc((100vw - 48px) * 0.86)"
-        placeholder="blur"
+        className="absolute inset-0 size-full"
       />
     </div>
   );
@@ -90,12 +95,13 @@ const MATCHES = [
 
 function FounderwayScene() {
   return (
-    <div className={s.scene} aria-hidden="true">
+    <div className={s.scene} aria-hidden="true" inert>
       <div className={s.stack}>
         {MATCHES.map((m) => (
           <div key={m.name} className={s.card}>
             <div className={s.top}>
-              <Image src={m.img} alt="" sizes="46px" />
+              {/* eslint-disable-next-line @next/next/no-img-element -- optimised srcset from getImageProps, no client code */}
+              <img {...getImageProps({ src: m.img, alt: "", sizes: "46px" }).props} alt="" />
               <div>
                 <b>{m.name}</b>
                 <span>{m.role}</span>
@@ -117,7 +123,7 @@ function FounderwayScene() {
 
 function NortheasternScene() {
   return (
-    <div className={s.scene} aria-hidden="true">
+    <div className={s.scene} aria-hidden="true" inert>
       <div className={s.page}>
         <i className={s.logo} />
         <i className={`${s.link} ${s.l1}`} />
