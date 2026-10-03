@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# panthshah2026-portfolio
 
-## Getting Started
+Panth Shah's portfolio, rebuilt in Next.js (App Router) + Tailwind CSS v4 and deployed on Vercel.
+It replaces [panth-2025-portfolio](https://github.com/panthshah/panth-2025-portfolio), which stays live until this site is approved.
 
-First, run the development server:
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Before every commit
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run check
+```
 
-## Learn More
+This runs lint, the TypeScript check, the token check and a production build. All of them must pass.
 
-To learn more about Next.js, take a look at the following resources:
+## Design tokens
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Every size comes from `src/app/globals.css`. Tailwind's default scales are switched off, so only these steps exist:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Token | Steps | Classes |
+|---|---|---|
+| Spacing | 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 | `p-1` … `p-10`, `gap-3`, `mt-5` … |
+| Type | 36 · 24 · 18 · 16 · 14 · 12 | `text-36` … `text-12` |
+| Corners | 4 · 8 · 12 · 24 · pill | `rounded-sm` · `rounded-md` · `rounded-lg` · `rounded-xl` · `rounded-full` |
+| Colour | page, ink, muted, faint, rule, hover, slot, accent, on-accent | `text-ink`, `bg-slot`, `border-rule` … |
+| Fonts | Bricolage Grotesque (titles), Geist, Geist Mono | `font-title`, `font-sans`, `font-mono` |
 
-## Deploy on Vercel
+A class that isn't on the scale (`gap-11`, `text-xl`) generates nothing, and arbitrary values (`gap-[13px]`) fail `npm run check:tokens`.
+To add a step, add it to `globals.css` and this table, not to one component.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Quality bar
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Every page is pre-rendered as static HTML.
+- Lighthouse 95+ on mobile and desktop, no layout shift.
+- Checked at 375, 768, 1024, 1440 and 1920px, on a real iPhone and Android phone.
+- Keyboard navigation, visible focus, AA contrast or better, and reduced motion respected.
+- Every old URL keeps working (see `redirects` in `next.config.ts`).
