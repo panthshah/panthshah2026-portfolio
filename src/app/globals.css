@@ -149,6 +149,27 @@
   backdrop-filter: blur(16px) saturate(1.2);
 }
 
+/* The statement's brush: a touched letter takes a colour at once and lifts 2px,
+   then fades back over 2.6s and settles (lib/brush/paint.ts sets data-wet). */
+@layer components {
+  .brush-ch {
+    position: relative;
+    top: 0;
+    transition: color 2.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.5s var(--ease-out);
+  }
+  .brush-ch[data-wet] {
+    top: -2px;
+    transition: color 0.08s, top 0.18s var(--ease-out);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brush-ch,
+  .brush-ch[data-wet] {
+    top: 0 !important;
+    transition: color 0.3s !important; /* colour only, no lift */
+  }
+}
+
 @layer base {
   body {
     background: var(--page);
