@@ -126,21 +126,7 @@
   --glass: rgb(255 255 255 / 0.76);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --page: #111213;
-    --ink: #ededeb;
-    --muted: #a0a3a8;
-    --faint: #6e7176;
-    --rule: #26282b;
-    --hover: #1c1e20;
-    --slot: #18191b;
-    --accent: #ededeb;
-    --on-accent: #111213;
-    --glass: rgb(28 30 32 / 0.76);
-  }
-}
+/* Light unless the visitor picks Dark in the Appearance panel (as in the prototype); the system setting is not followed. */
 
 :root[data-theme="dark"] {
   color-scheme: dark;
