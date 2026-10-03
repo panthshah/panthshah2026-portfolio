@@ -46,6 +46,9 @@ The same kind of element always gets the same corner:
 
 The mini interfaces drawn inside the work thumbnails are illustrations, not site controls, but they use the same scale.
 
+Inside the Appearance panel every option is a 4px chip (the prototype's choice for that panel); the Light/Dark and
+Text/Page switches nest 2px halves 3px inside their 4px track.
+
 A class that isn't on the scale (`gap-11`, `text-xl`) generates nothing, and arbitrary values (`gap-[13px]`) fail `npm run check:tokens`.
 To add a step, add it to `globals.css` and this table, not to one component.
 
@@ -67,3 +70,10 @@ same-origin frame by `src/components/fold/FoldStage.tsx`. It loads `three.min.js
   served at the screen's size by next/image) until **Try it**.
 - The stills are renders of the live phone (open, `fold8.view(0.22, 0.16, 1.05)`), made with the page's
   `fold8.snapshot()` hook. If the phone changes, render them again the same way so the still and the live phone match.
+
+## Appearance
+
+The avatar opens the Appearance panel (`src/components/appearance/`, engine in `src/lib/appearance.ts`):
+Light / Dark, a page colour (into the Text or the Page; colour field + six presets) and a cursor. Every page colour is
+a tone of the chosen hue and each text colour is contrast-checked as it's made. Choices are saved on the device, and
+an inline script in `<head>` (`BOOT`) applies them before the first paint.

@@ -96,7 +96,7 @@ export function FoldStage() {
     const doc = f?.contentDocument, win = f?.contentWindow as Embed["win"] | null;
     if (!doc || !win) return;
     embed.current = { doc, win };
-    doc.documentElement.dataset.theme = dark ? "dark" : "light";
+    themeEmbed(doc, dark);
     const stageEl = doc.getElementById("stage");
     const whenReady = () => {
       if (!stageEl?.classList.contains("ready")) return false;
@@ -130,7 +130,7 @@ export function FoldStage() {
   };
 
   // keep the live phone in step with the panel
-  useEffect(() => { if (embed.current) embed.current.doc.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
+  useEffect(() => { if (embed.current) themeEmbed(embed.current.doc, dark); }, [dark]);
   useEffect(() => { zoom(trying ? LIFE : REST); }, [trying, zoom, ready]);
 
   const pick = (id: ColourId) => {
@@ -283,6 +283,13 @@ export function FoldStage() {
       </a>
     </section>
   );
+}
+
+/** The phone's page follows the site's mode. Its colour-scheme must match the page's too: when they differ,
+    browsers paint the frame with an opaque white (or black) background instead of letting the panel show through. */
+function themeEmbed(doc: Document, dark: boolean) {
+  doc.documentElement.dataset.theme = dark ? "dark" : "light";
+  doc.documentElement.style.colorScheme = dark ? "dark" : "light";
 }
 
 function FoldIcon() {

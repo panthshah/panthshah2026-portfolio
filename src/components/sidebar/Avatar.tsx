@@ -6,11 +6,13 @@ import { avatar } from "@/lib/bot/avatar";
 /**
  * The character in the sidebar. It renders as a still (the idle pose, a cached SVG file),
  * then the animation engine loads when the browser is idle and takes over the same SVG.
- * Rest the cursor on him for a moment and he flies off with his bamboo-copter.
+ * Rest the cursor on him for a moment and he flies off with his bamboo-copter. Click him for the Appearance panel.
  */
-export function Avatar({ idleSrc }: { idleSrc: string }) {
-  const markRef = useRef<HTMLSpanElement>(null);
+export function Avatar({ idleSrc, open, onToggle, controls }: { idleSrc: string; open: boolean; onToggle: () => void; controls: string }) {
+  const markRef = useRef<HTMLButtonElement>(null);
   const faceRef = useRef<HTMLSpanElement>(null);
+  const openRef = useRef(open);
+  useEffect(() => { openRef.current = open; }, [open]);
 
   useEffect(() => {
     const mark = markRef.current, face = faceRef.current;
@@ -35,7 +37,7 @@ export function Avatar({ idleSrc }: { idleSrc: string }) {
     const canFly = !reduce && matchMedia("(hover: hover)").matches;
     const enter = (e: PointerEvent) => {
       avatar.hold("happy");
-      if (!canFly || e.pointerType !== "mouse" || flying) return;
+      if (!canFly || e.pointerType !== "mouse" || flying || openRef.current) return;
       clearTimeout(armT);
       armT = setTimeout(async () => {
         flying = true;
@@ -44,9 +46,11 @@ export function Avatar({ idleSrc }: { idleSrc: string }) {
         flying = false;
       }, 420);
     };
-    const leave = () => { clearTimeout(armT); avatar.release(300); };
+    const leave = () => { clearTimeout(armT); if (!openRef.current) avatar.release(300); };
+    const press = () => clearTimeout(armT); // a click opens the panel instead of starting the flight
     mark.addEventListener("pointerenter", enter);
     mark.addEventListener("pointerleave", leave);
+    mark.addEventListener("pointerdown", press);
 
     return () => {
       cancelled = true;
@@ -54,16 +58,27 @@ export function Avatar({ idleSrc }: { idleSrc: string }) {
       clearTimeout(helloT); clearTimeout(armT);
       mark.removeEventListener("pointerenter", enter);
       mark.removeEventListener("pointerleave", leave);
+      mark.removeEventListener("pointerdown", press);
       destroy();
     };
   }, []);
 
   return (
-    <span ref={markRef} className="grid size-avatar shrink-0 place-items-center overflow-hidden rounded-full bg-avatar">
+    <button
+      ref={markRef}
+      type="button"
+      onClick={onToggle}
+      aria-label="Appearance"
+      aria-haspopup="dialog"
+      aria-expanded={open}
+      aria-controls={controls}
+      data-appearance-opener=""
+      className="grid size-avatar shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-avatar"
+    >
       <span ref={faceRef} className="block size-full transition-opacity duration-120 in-data-away:opacity-0">
         {/* eslint-disable-next-line @next/next/no-img-element -- a tiny static SVG; the engine replaces it with the live drawing */}
         <img src={idleSrc} alt="" width={40} height={40} className="block size-full" />
       </span>
-    </span>
+    </button>
   );
 }

@@ -3,6 +3,7 @@ import { Alegreya, Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { Footer } from "@/components/footer/Footer";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { BOOT } from "@/lib/appearance";
 import { idleBotSrc } from "@/lib/bot/idle";
 import "./globals.css";
 
@@ -56,7 +57,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${bricolage.variable} ${geistSans.variable} ${geistMono.variable} ${alegreya.variable}`}
+      suppressHydrationWarning // the boot script sets the visitor's saved colours on <html> before React starts
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: BOOT }} />
+      </head>
       <body>
         <Sidebar idleAvatar={idleBotSrc("nav")} />
         {/* beside the sidebar on desktop; below that, under the fixed top bar and lined up with its avatar */}

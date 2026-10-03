@@ -103,10 +103,10 @@
   --color-on-accent: var(--on-accent);
   --color-avatar: #fff5d6;
 
-  /* project colours, used for the company names in the statement */
-  --color-samsung: #2f5bcf;
-  --color-founderway: #6b4fd0;
-  --color-northeastern: #c9452f;
+  /* project colours, used for the company names in the statement (lighter on dark pages, ≥ 4.5:1 there) */
+  --color-samsung: var(--samsung);
+  --color-founderway: var(--founderway);
+  --color-northeastern: var(--northeastern);
 
   /* Fonts (self-hosted by next/font in layout.tsx) */
   --font-*: initial;
@@ -130,6 +130,9 @@
   --accent: #111213;
   --on-accent: #ffffff;
   --glass: rgb(255 255 255 / 0.76);
+  --samsung: #2f5bcf;
+  --founderway: #6b4fd0;
+  --northeastern: #c9452f;
 }
 
 /* Light unless the visitor picks Dark in the Appearance panel (as in the prototype); the system setting is not followed. */
@@ -146,7 +149,19 @@
   --accent: #ededeb;
   --on-accent: #111213;
   --glass: rgb(28 30 32 / 0.76);
+  --samsung: #6989dc;
+  --founderway: #917ddc;
+  --northeastern: #d56e5d;
 }
+
+/* the Appearance panel's cursors (your old site's art, 64px); links, buttons and the brush keep their own */
+:root[data-cursor="cat"] { cursor: url("/cursors/cat.png") 16 16, auto; }
+:root[data-cursor="creature"] { cursor: url("/cursors/creature.png") 16 16, auto; }
+:root[data-cursor="dog"] { cursor: url("/cursors/dog.png") 16 16, auto; }
+:root[data-cursor="fox"] { cursor: url("/cursors/fox.png") 16 16, auto; }
+
+/* while a colour is being dragged, every transition runs quickly so the page keeps up */
+:root[data-tinting] *, :root[data-tinting] *::before, :root[data-tinting] *::after { transition-duration: 0.12s !important; }
 
 /* The Fold8 panel's colours, computed per colourway (components/fold/colourways.ts) and set on the panel itself,
    so they must resolve where they're used (inline), not at the root. */

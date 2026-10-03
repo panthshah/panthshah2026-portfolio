@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { BotState } from "@/lib/bot/engine";
 import { avatar } from "@/lib/bot/avatar";
 import "@/lib/audio"; // starts listening for the first click/tap/key, which is what lets the site make sound
 import { Icon, type IconName } from "@/components/icons";
+import { AppearancePanel } from "@/components/appearance/AppearancePanel";
 import { Avatar } from "./Avatar";
 
 const EMAIL = "panthshahdesigns@gmail.com";
@@ -62,7 +63,19 @@ function Ext() {
  */
 export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
   const [open, setOpen] = useState(false);
+  const [appearance, setAppearance] = useState(false);
   const [copied, setCopied] = useState(false);
+  const closeAppearance = useCallback((refocus = true) => {
+    setAppearance(false);
+    avatar.release();
+    if (refocus) document.querySelector<HTMLElement>("[data-appearance-opener]")?.focus({ preventScroll: true });
+  }, []);
+  const toggleAppearance = () => {
+    if (appearance) { closeAppearance(); return; }
+    setOpen(false);
+    setAppearance(true);
+    avatar.hold("happy"); // he's pleased while you dress up the page
+  };
   const panelRef = useRef<HTMLElement>(null);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -103,7 +116,7 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
     >
       {/* who */}
       <div className="flex items-center gap-3 lg:mt-drop lg:pb-5">
-        <Avatar idleSrc={idleAvatar} />
+        <Avatar idleSrc={idleAvatar} open={appearance} onToggle={toggleAppearance} controls="appearance" />
         <p className="grid min-w-0 gap-0.5">
           <span className="text-16 leading-20 font-semibold text-ink">Panth Shah</span>
           <span className="text-14 leading-18 text-muted">Designer at Samsung</span>
@@ -161,6 +174,7 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
 
       <p role="status" aria-live="polite" className="sr-only">{copied ? "Email address copied." : ""}</p>
     </header>
+    <AppearancePanel id="appearance" open={appearance} onClose={closeAppearance} />
     </>
   );
 }
