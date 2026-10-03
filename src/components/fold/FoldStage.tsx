@@ -186,6 +186,8 @@ export function FoldStage() {
     <section aria-label="Galaxy Z Fold8" className="mt-7">
       <div
         ref={stageRef}
+        data-xr="Galaxy Z Fold8 / Stage"
+        data-xr-note="three.js · drag to turn · Fold button folds it"
         className="fold-stage relative flex flex-col overflow-hidden rounded-surface lg:block"
         data-trying={trying || undefined}
         data-ready={ready || undefined}

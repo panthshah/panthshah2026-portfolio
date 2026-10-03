@@ -70,6 +70,7 @@ export function AppearancePanel({ open, onClose, id }: { open: boolean; onClose:
       ref={panelRef}
       id={id}
       role="dialog"
+      data-xr="Panel / Appearance"
       aria-labelledby={`${id}-title`}
       aria-hidden={!open}
       data-open={open || undefined}

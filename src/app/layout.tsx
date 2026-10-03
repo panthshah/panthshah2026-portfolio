@@ -3,6 +3,7 @@ import { Alegreya, Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { Footer } from "@/components/footer/Footer";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { XRay } from "@/components/xray/XRay";
 import { BOOT } from "@/lib/appearance";
 import { idleBotSrc } from "@/lib/bot/idle";
 import "./globals.css";
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* beside the sidebar on desktop; below that, under the fixed top bar and lined up with its avatar */}
         <main className="px-5 pt-under-bar pb-9 lg:pt-shell lg:pr-5 lg:pl-rail">{children}</main>
         <Footer />
+        <XRay />
       </body>
     </html>
   );

@@ -47,7 +47,7 @@ export function BrushTitle({ className, pieces }: { className?: string; pieces: 
   // the wrapper holds the ghost, which takes its width from here (so it can never be wider than the statement)
   return (
     <div className="relative">
-      <h1 ref={ref} className={`brush-title ${className ?? ""}`} aria-label={pieces.map((p) => (typeof p === "string" ? p : p.text)).join("")}>
+      <h1 ref={ref} data-xr="Heading / Statement" data-xr-note="each letter takes the brush" className={`brush-title ${className ?? ""}`} aria-label={pieces.map((p) => (typeof p === "string" ? p : p.text)).join("")}>
         {pieces.map((p, i) => render(p, i, split))}
       </h1>
     </div>

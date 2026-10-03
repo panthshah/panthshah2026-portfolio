@@ -13,22 +13,23 @@ import s from "./scenes.module.css";
 // Copy carried over from the prototype. Still to confirm against the case studies: Founderway "200+ sign-ups on
 // launch day" and 2024-25; Northeastern "10+ university websites", "30,000+ students" and 2023-24; the Playground
 // line is a draft. Case study routes keep the old site's URLs.
-const PROJECTS: { href: string; colour: string; title: string; desc: string; meta: string; scene: ReactNode }[] = [
-  { href: "/samsung", colour: "#2F5BCF", title: "Smarter Product Comparisons", desc: "Redesigning the compare experience for Samsung.com's Product Finder", meta: "Samsung Electronics · 2025", scene: <SamsungScene /> },
-  { href: "/foundermatch", colour: "#6B4FD0", title: "Better Co-founder Matching", desc: "A co-founder matching platform that drove 200+ sign-ups on launch day", meta: "Founderway · 2024-25", scene: <FounderwayScene /> },
-  { href: "/northeastern", colour: "#C9452F", title: "Designing for Access", desc: "Auditing accessibility across 10+ university websites for 30,000+ students", meta: "Northeastern University · 2023-24", scene: <NortheasternScene /> },
+const PROJECTS: { xr: string; href: string; colour: string; title: string; desc: string; meta: string; scene: ReactNode }[] = [
+  { xr: "Card / Samsung", href: "/samsung", colour: "#2F5BCF", title: "Smarter Product Comparisons", desc: "Redesigning the compare experience for Samsung.com's Product Finder", meta: "Samsung Electronics · 2025", scene: <SamsungScene /> },
+  { xr: "Card / Founderway", href: "/foundermatch", colour: "#6B4FD0", title: "Better Co-founder Matching", desc: "A co-founder matching platform that drove 200+ sign-ups on launch day", meta: "Founderway · 2024-25", scene: <FounderwayScene /> },
+  { xr: "Card / Northeastern", href: "/northeastern", colour: "#C9452F", title: "Designing for Access", desc: "Auditing accessibility across 10+ university websites for 30,000+ students", meta: "Northeastern University · 2023-24", scene: <NortheasternScene /> },
 ];
 
 /** Selected work: a 2 × 2 grid (one column on phones) on the same edges as the statement and the Fold8. */
 export function Work() {
   return (
     <section id="work" aria-labelledby="work-title" className="mt-8 scroll-mt-under-bar lg:scroll-mt-shell">
-      <h2 id="work-title" className="mb-5 text-24 font-medium tracking-heading text-ink">Selected work</h2>
+      <h2 id="work-title" data-xr="Heading / Selected work" className="mb-5 text-24 font-medium tracking-heading text-ink">Selected work</h2>
       <LiveTiles className="grid grid-cols-1 gap-x-5 gap-y-7 md:grid-cols-2">
         {PROJECTS.map((p) => (
           <Tile key={p.href} {...p} />
         ))}
         <Tile
+          xr="Card / Playground"
           href="/playground"
           colour="var(--ink)"
           title="Playground"
@@ -42,9 +43,9 @@ export function Work() {
   );
 }
 
-function Tile({ href, colour, title, desc, meta, scene, mediaClass = "" }: { href: string; colour: string; title: string; desc: string; meta: string; scene: ReactNode; mediaClass?: string }) {
+function Tile({ xr, href, colour, title, desc, meta, scene, mediaClass = "" }: { xr: string; href: string; colour: string; title: string; desc: string; meta: string; scene: ReactNode; mediaClass?: string }) {
   return (
-    <a href={href} data-tile="" className={`${s.tile} group block rounded-surface focus-visible:outline-offset-4`} style={{ "--c": colour } as CSSProperties}>
+    <a href={href} data-tile="" data-xr={xr} className={`${s.tile} group block rounded-surface focus-visible:outline-offset-4`} style={{ "--c": colour } as CSSProperties}>
       <div className={`${s.media} ${mediaClass} relative aspect-4/3 overflow-hidden rounded-surface`}>{scene}</div>
       <div className={`${s.caption} mt-4`}>
         <h3 className="text-18 font-medium text-ink">{title}</h3>

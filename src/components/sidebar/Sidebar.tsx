@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { BotState } from "@/lib/bot/engine";
 import { avatar } from "@/lib/bot/avatar";
+import { useXray, xray } from "@/lib/xray";
 import "@/lib/audio"; // starts listening for the first click/tap/key, which is what lets the site make sound
 import { Icon, type IconName } from "@/components/icons";
 import { AppearancePanel } from "@/components/appearance/AppearancePanel";
@@ -64,6 +65,7 @@ function Ext() {
 export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
   const [open, setOpen] = useState(false);
   const [appearance, setAppearance] = useState(false);
+  const xrayOn = useXray();
   const [copied, setCopied] = useState(false);
   const closeAppearance = useCallback((refocus = true) => {
     setAppearance(false);
@@ -111,6 +113,7 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
     <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-30 h-bar-scrim bg-linear-to-b from-page from-85% to-transparent lg:hidden" />
     <header
       ref={panelRef}
+      data-xr="Nav / Sidebar"
       data-open={open || undefined}
       className="glass fixed inset-x-3 top-3 z-40 max-h-bar-menu overflow-y-auto rounded-surface p-3 shadow-panel inset-ring inset-ring-rule lg:inset-y-3 lg:right-auto lg:flex lg:max-h-none lg:w-panel lg:flex-col lg:overflow-y-auto lg:p-4"
     >
@@ -134,23 +137,23 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
         </button>
       </div>
 
-      <div id="site-menu" className="mt-3 hidden border-t border-rule in-data-open:block lg:mt-0 lg:flex lg:flex-1 lg:flex-col">
+      <div id="site-menu" data-xr="Nav / Links" className="mt-3 hidden border-t border-rule in-data-open:block lg:mt-0 lg:flex lg:flex-1 lg:flex-col">
         {/* where */}
         <nav aria-label="Main" className="grid gap-0.5 pt-3">
           {NAV.map(({ label, href, icon, react, external, soon }) => {
             const body: ReactNode = (<><Icon name={icon} />{label}{external && <Ext />}</>);
             return external ? (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={ROW} onClick={close} {...reacts(react)}>{body}</a>
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" data-xr="Nav / Link" className={ROW} onClick={close} {...reacts(react)}>{body}</a>
             ) : (
               // pages still to be built aren't prefetched (a prefetch of a missing page logs a 404)
-              <Link key={label} href={href} prefetch={soon ? false : undefined} className={ROW} onClick={close} {...reacts(react)}>{body}</Link>
+              <Link key={label} href={href} prefetch={soon ? false : undefined} data-xr="Nav / Link" className={ROW} onClick={close} {...reacts(react)}>{body}</Link>
             );
           })}
         </nav>
 
         {/* utilities, pinned to the bottom of the sidebar */}
         <div className="mt-3 grid border-t border-rule pt-3 lg:mt-auto">
-          <div className="grid gap-0.5 lg:mb-3 lg:border-b lg:border-rule lg:pb-3">
+          <div data-xr="Nav / Contact" className="grid gap-0.5 lg:mb-3 lg:border-b lg:border-rule lg:pb-3">
             {CONTACT.map(({ label, href }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={ROW}>
                 {label}
@@ -163,9 +166,9 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
               <span className="sr-only">: {EMAIL}</span>
             </button>
           </div>
-          {/* X-ray (hold ⌥ or press X) is wired up in its own step */}
-          <button type="button" aria-pressed="false" className={`hidden ${ROW_LOOK} lg:mb-drop lg:flex`}>
-            <Icon name="option" className="size-icon text-ink" />
+          {/* X-ray: the same as holding ⌥ or pressing X */}
+          <button type="button" data-xr="Nav / X-ray" aria-pressed={xrayOn} onClick={() => xray.toggle()} className={`hidden ${ROW_LOOK} lg:mb-drop lg:flex aria-pressed:text-ink`}>
+            <Icon name="option" className={`size-icon ${xrayOn ? "text-xray" : "text-ink"}`} />
             Hold for X-ray
             <span className={`${HINT} text-muted`}>or press X</span>
           </button>

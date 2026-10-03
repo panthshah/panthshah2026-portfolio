@@ -102,6 +102,7 @@
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-avatar: #fff5d6;
+  --color-xray: #0d99ff; /* X-ray's blue (as in Figma) */
 
   /* project colours, used for the company names in the statement (lighter on dark pages, ≥ 4.5:1 there) */
   --color-samsung: var(--samsung);
@@ -159,6 +160,10 @@
 :root[data-cursor="creature"] { cursor: url("/cursors/creature.png") 16 16, auto; }
 :root[data-cursor="dog"] { cursor: url("/cursors/dog.png") 16 16, auto; }
 :root[data-cursor="fox"] { cursor: url("/cursors/fox.png") 16 16, auto; }
+
+/* X-ray on (components/xray): the page a little quieter so the specs stand out, and a crosshair to point with */
+:root[data-xray] { cursor: crosshair; }
+:root[data-xray] main, :root[data-xray] footer { filter: saturate(0.6); }
 
 /* while a colour is being dragged, every transition runs quickly so the page keeps up */
 :root[data-tinting] *, :root[data-tinting] *::before, :root[data-tinting] *::after { transition-duration: 0.12s !important; }

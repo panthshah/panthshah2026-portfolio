@@ -8,10 +8,10 @@ export function Footer() {
       <h2 id="footer-title" className="sr-only">San Francisco Bay Area</h2>
       <div className={s.grid}>
         {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div className={`${s.tile} ${s.art} ${s.day}`}><img src="/footer/golden-gate.svg" alt="Doodle of the Golden Gate Bridge by day, with a sailboat on the bay" loading="lazy" decoding="async" /></div>
+        <div data-xr="Footer / Golden Gate" className={`${s.tile} ${s.art} ${s.day}`}><img src="/footer/golden-gate.svg" alt="Doodle of the Golden Gate Bridge by day, with a sailboat on the bay" loading="lazy" decoding="async" /></div>
         <ClockTile className={s.tile} />
         {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div className={`${s.tile} ${s.art} ${s.night}`}><img src="/footer/twin-peaks.svg" alt="Doodle of the city lights at night from Twin Peaks, with car light trails on the winding road" loading="lazy" decoding="async" /></div>
+        <div data-xr="Footer / Twin Peaks" className={`${s.tile} ${s.art} ${s.night}`}><img src="/footer/twin-peaks.svg" alt="Doodle of the city lights at night from Twin Peaks, with car light trails on the winding road" loading="lazy" decoding="async" /></div>
       </div>
       <div className="mt-4 flex flex-wrap items-end justify-between gap-5 text-14 text-muted">
         <p>

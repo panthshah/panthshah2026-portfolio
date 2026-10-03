@@ -73,6 +73,7 @@ export function Avatar({ idleSrc, open, onToggle, controls }: { idleSrc: string;
       aria-expanded={open}
       aria-controls={controls}
       data-appearance-opener=""
+      data-xr="Avatar / Live"
       className="grid size-avatar shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-avatar"
     >
       <span ref={faceRef} className="block size-full transition-opacity duration-120 in-data-away:opacity-0">

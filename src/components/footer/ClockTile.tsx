@@ -30,7 +30,7 @@ export function ClockTile({ className }: { className?: string }) {
 
   const h = now ? +hour.format(now) % 24 : 12;
   return (
-    <div ref={ref} className={`${s.clock} ${className ?? ""}`} data-phase={h >= 7 && h < 19 ? "day" : "night"}>
+    <div ref={ref} data-xr="Footer / Clock" className={`${s.clock} ${className ?? ""}`} data-phase={h >= 7 && h < 19 ? "day" : "night"}>
       <span className={s.line}>; {now ? offset(now) : "gmt"} ; pt ;</span>
       <time className={s.time} dateTime={now?.toISOString()}>{now ? time.format(now) : "—"}</time>
       <span className={s.line}>
