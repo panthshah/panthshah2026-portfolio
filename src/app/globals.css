@@ -41,7 +41,9 @@
   --spacing-drop: calc(var(--text-36) * 0.3094);
 
   /* Shell below 1024px: a bar fixed across the top (12 inset + 40 avatar + 2 × 12 padding = 76px to its bottom) */
-  --spacing-under-bar: calc(76px + var(--spacing-7)); /* content starts 48px under the bar */
+  --spacing-bar: 76px;
+  --spacing-bar-scrim: calc(var(--spacing-bar) + var(--spacing-3)); /* the page colour behind the bar, then a 12px fade */
+  --spacing-under-bar: calc(var(--spacing-bar) + var(--spacing-7)); /* content starts 48px under the bar */
   --spacing-bar-menu: calc(100dvh - 2 * var(--spacing-3)); /* the open menu never runs off the screen */
 
   /* Corners by role, so the same kind of element always has the same corner.

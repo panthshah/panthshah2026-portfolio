@@ -92,6 +92,10 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
   const close = () => setOpen(false);
 
   return (
+    <>
+    {/* phones and tablets: the page colour behind the floating bar, so scrolled content slips under it instead of
+        showing in the gap above it or through its glass (outside the header: its backdrop-filter would trap a fixed child) */}
+    <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-30 h-bar-scrim bg-linear-to-b from-page from-85% to-transparent lg:hidden" />
     <header
       ref={panelRef}
       data-open={open || undefined}
@@ -155,5 +159,6 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
 
       <p role="status" aria-live="polite" className="sr-only">{copied ? "Email address copied." : ""}</p>
     </header>
+    </>
   );
 }
