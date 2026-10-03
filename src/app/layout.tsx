@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Sidebar } from "@/components/sidebar/Sidebar";
+import { idleAvatarSvg } from "@/lib/bot/idle";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -31,7 +33,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#111213" },
@@ -44,7 +45,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${bricolage.variable} ${geistSans.variable} ${geistMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Sidebar idleAvatar={idleAvatarSvg} />
+        {/* beside the sidebar on desktop; below that, under the fixed top bar and lined up with its avatar */}
+        <main className="px-5 pt-under-bar pb-9 lg:pt-shell lg:pr-5 lg:pl-rail">{children}</main>
+      </body>
     </html>
   );
 }

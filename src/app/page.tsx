@@ -1,9 +1,19 @@
-// Placeholder while the home page sections are rebuilt one at a time.
 export default function Home() {
   return (
-    <main className="mx-auto max-w-page px-5 py-9">
-      <h1 className="font-title text-36 font-medium">Panth Shah</h1>
-      <p className="mt-3 text-16 text-muted">Designer at Samsung</p>
-    </main>
+    <section aria-label="Introduction">
+      <h1 className="font-title text-24 font-medium tracking-statement text-pretty text-ink md:text-36">
+        Hi, I am Panth, a data driven designer shaping experiences for B2B and B2C Enterprises. Currently at{" "}
+        <a
+          href="https://design.samsung.com/global/main/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-samsung decoration-2 underline-offset-6 hover:underline"
+        >
+          Samsung
+        </a>
+        , previously <span className="text-founderway">Founderway</span> and{" "}
+        <span className="text-northeastern">Northeastern</span>.
+      </h1>
+    </section>
   );
 }

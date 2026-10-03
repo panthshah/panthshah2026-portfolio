@@ -6,7 +6,7 @@ import { join } from "node:path";
 
 const ROOT = "src";
 const EXT = /\.(tsx?|jsx?|mdx?)$/;
-const ARBITRARY = /\b[a-z][\w-]*-\[[^\]\s]+\]/g;
+const ARBITRARY = /\b[a-z][\w-]*-\[[^\]\s]+\](?!:)/g; // values, not variants like data-[x]:
 
 function walk(dir) {
   return readdirSync(dir).flatMap((name) => {
