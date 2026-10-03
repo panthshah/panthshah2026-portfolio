@@ -1,3 +1,4 @@
+import { FoldStage } from "@/components/fold/FoldStage";
 import { BrushTitle, type Piece } from "@/components/statement/BrushTitle";
 
 const STATEMENT: Piece[] = [
@@ -17,6 +18,7 @@ export default function Home() {
         pieces={STATEMENT}
         className="font-title text-24 font-medium tracking-statement text-pretty text-ink md:text-36"
       />
+      <FoldStage />
     </section>
   );
 }

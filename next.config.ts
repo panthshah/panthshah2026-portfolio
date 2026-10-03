@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: "/home", destination: "/", permanent: true }];
   },
+  // three.js and the Onest files inside the Fold8 page never change (a new version gets a new name), so browsers keep them
+  async headers() {
+    const forever = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
+    return [
+      { source: "/fold/three.min.js", headers: forever },
+      { source: "/fold/fonts/:file*", headers: forever },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
   },

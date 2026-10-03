@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored: the Fold8 phone page and three.js 0.160.0, served as-is
+    "public/fold/**",
   ]),
 ]);
 
