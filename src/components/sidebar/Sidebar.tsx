@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { BotState } from "@/lib/bot/engine";
 import { avatar } from "@/lib/bot/avatar";
+import "@/lib/audio"; // starts listening for the first click/tap/key, which is what lets the site make sound
 import { Icon, type IconName } from "@/components/icons";
 import { Avatar } from "./Avatar";
 

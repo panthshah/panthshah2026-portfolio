@@ -4,6 +4,7 @@
 // and (with sounds on) a soft rotor whirr that pans across the speakers as he crosses the page.
 import type { createBot as CreateBot } from "./engine"; // passed in, so this chunk doesn't carry its own copy
 import { VIEW } from "./views";
+import { audio, soundOn } from "@/lib/audio";
 
 const VB = VIEW.full.split(" ").map(Number);
 const R = [0, 10.2]; // the point of the full-body view that sits at the avatar's centre
@@ -25,15 +26,10 @@ const out = (t: number) => 1 - (1 - t) ** 3;
 const bez = (p0: number, p1: number, p2: number, p3: number, t: number) => { const m = 1 - t; return m * m * m * p0 + 3 * m * m * t * p1 + 3 * m * t * t * p2 + t * t * t * p3; };
 
 // rotor sound: looped noise, band-passed low, chopped by a slow oscillator so it goes "whup-whup"
-let ctx: AudioContext | null = null;
 function rotor() {
-  try { if (localStorage.getItem("pp-sound") === "off") return null; } catch {}
-  const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!AC) return null;
+  const c = soundOn() ? audio() : null; // silent until the visitor has clicked, tapped or typed on the page
+  if (!c) return null;
   try {
-    ctx ??= new AC();
-    const c = ctx;
-    if (c.state === "suspended") void c.resume();
     const buf = c.createBuffer(1, c.sampleRate * 2, c.sampleRate), d = buf.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     const src = c.createBufferSource(), bp = c.createBiquadFilter(), chop = c.createGain(), lfo = c.createOscillator(), depth = c.createGain(), vol = c.createGain();
@@ -52,7 +48,10 @@ function rotor() {
         bp.frequency.setTargetAtTime(260 + 240 * k, t, 0.12);
         pan?.pan.setTargetAtTime(clamp((x / innerWidth) * 2 - 1, -1, 1) * 0.7, t, 0.1);
       },
-      stop() { vol.gain.setTargetAtTime(0, c.currentTime, 0.06); setTimeout(() => { try { src.stop(); lfo.stop(); } catch {} }, 500); },
+      stop() {
+        vol.gain.setTargetAtTime(0, c.currentTime, 0.06);
+        setTimeout(() => { try { src.stop(); lfo.stop(); src.disconnect(); vol.disconnect(); } catch {} }, 500);
+      },
     };
   } catch { return null; }
 }
