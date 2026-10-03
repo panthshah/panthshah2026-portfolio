@@ -185,7 +185,6 @@
 /* The Galaxy Z Fold8 stage (components/fold/FoldStage.tsx). The colourway sets --fs-bg, --fs-grid, --fs-ink, --fs-muted, --fs-ring. */
 @layer components {
   .fold-stage {
-    height: clamp(300px, 40vh, 380px);
     background-color: var(--fs-bg);
     background-image: radial-gradient(circle, var(--fs-grid) 1px, transparent 1.4px);
     background-size: 24px 24px;
@@ -193,13 +192,22 @@
     isolation: isolate;
     transition: height 0.55s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.4s ease;
   }
-  /* Try it: life size, or as tall as the window allows (under the top bar on smaller screens) */
-  .fold-stage[data-trying] { height: min(620px, calc(100svh - 100px)); }
-  @media (min-width: 1024px) { .fold-stage[data-trying] { height: min(620px, calc(100vh - 48px)); } }
-
-  /* the embed frames the phone a little high at rest (room for the bottom row) and a touch low at life size */
-  .fold-frame { transform: translateY(-14px); transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1); }
-  .fold-stage[data-trying] .fold-frame { transform: translateY(4px); }
+  /* Desktop: the panel has a fixed height and the controls float over the phone (as in the prototype).
+     Try it: life size, or as tall as the window allows. The phone sits a little high at rest (room for the bottom
+     row) and a touch low at life size. */
+  @media (min-width: 1024px) {
+    .fold-stage { height: clamp(300px, 40vh, 380px); scroll-margin: 24px 0; }
+    .fold-stage[data-trying] { height: min(620px, calc(100vh - 48px)); }
+    .fold-frame { transform: translateY(-14px); transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .fold-stage[data-trying] .fold-frame { transform: translateY(4px); }
+  }
+  /* Phones and tablets: the panel is three rows and only the phone's area changes height (a little taller while
+     trying; the screen's width is what limits the phone's size here, so more height wouldn't make it bigger). */
+  @media (max-width: 1023px) {
+    .fold-stage { scroll-margin: 88px 0 24px; } /* clear of the fixed top bar */
+    .fold-area { height: clamp(200px, 60vw, 360px); transition: height 0.55s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .fold-stage[data-trying] .fold-area { height: clamp(280px, 80vw, 480px); }
+  }
   /* without a mouse, or on smaller screens, the phone only takes touches while trying, so swipes scroll the page */
   @media (hover: none), (pointer: coarse), (max-width: 1023px) {
     .fold-stage:not([data-trying]) .fold-frame { pointer-events: none; }
@@ -244,7 +252,7 @@
   .fs-dot[aria-pressed="true"] { outline-color: var(--fs-ring); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fold-stage, .fold-frame { transition: none !important; }
+  .fold-stage, .fold-frame, .fold-area { transition: none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

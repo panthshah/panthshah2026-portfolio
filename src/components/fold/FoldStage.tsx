@@ -25,7 +25,8 @@ export function FoldStage() {
   const stageRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
   const tryRef = useRef<HTMLButtonElement>(null);
-  const doneRef = useRef<HTMLButtonElement>(null);
+  const doneRef = useRef<HTMLButtonElement>(null); // bottom row (phones, tablets)
+  const doneTopRef = useRef<HTMLButtonElement>(null); // top bar (desktop)
   const embed = useRef<Embed | null>(null);
 
   const [colour, setColour] = useState<ColourId>("pistachio");
@@ -125,20 +126,16 @@ export function FoldStage() {
     pickInEmbed(id);
   };
 
+  const visible = (el: HTMLElement | null) => (el && el.offsetParent !== null ? el : null);
   const open = () => {
     if (trying) return;
     setLoad(true); // phones: the live phone loads now
     setTrying(true);
-    const stage = stageRef.current;
-    if (stage) {
-      // keep the whole grown panel on screen (and clear of the top bar on smaller screens)
-      const r = stage.getBoundingClientRect(), h = Math.min(620, innerHeight - 48);
-      const top = matchMedia("(min-width: 1024px)").matches ? 24 : 88;
-      const over = r.top + h + 24 - innerHeight, under = top - r.top;
-      const by = under > 0 ? -under : over > 0 ? over : 0;
-      if (by) scrollBy({ top: by, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    }
-    requestAnimationFrame(() => doneRef.current?.focus({ preventScroll: true }));
+    // Done is in the top bar on desktop and in the bottom row below that: focus whichever is showing
+    requestAnimationFrame(() => (visible(doneTopRef.current) ?? doneRef.current)?.focus({ preventScroll: true }));
+    // once the panel has grown, bring all of it on screen (scroll margins keep it clear of the top bar)
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(() => stageRef.current?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), reduce ? 0 : 560);
   };
   const close = useCallback(() => {
     setTrying((was) => {
@@ -155,52 +152,34 @@ export function FoldStage() {
 
   const style = { ...Object.fromEntries(Object.entries(theme).filter(([k]) => k.startsWith("--"))) } as CSSProperties;
 
+  const tryOrDone = trying ? (
+    <>
+      <span className="text-center">Drag to turn · Tap the screen to use it</span>
+      <button ref={doneRef} type="button" className="fs-btn pointer-events-auto lg:hidden" onClick={close}>
+        <CloseIcon />
+        Done
+      </button>
+    </>
+  ) : (
+    <button ref={tryRef} type="button" aria-expanded={trying} onClick={open} className="fs-btn fs-btn-tinted pointer-events-auto">
+      <TryIcon />
+      Try it
+    </button>
+  );
+
+  /* Desktop (lg): the prototype's layout, controls floating over the phone.
+     Phones and tablets: three rows that never overlap: name or Fold + colours / the phone / Try it or Done. */
   return (
     <section aria-label="Galaxy Z Fold8" className="mt-7">
       <div
         ref={stageRef}
-        className="fold-stage relative overflow-hidden rounded-surface"
+        className="fold-stage relative flex flex-col overflow-hidden rounded-surface lg:block"
         data-trying={trying || undefined}
         data-ready={ready || undefined}
         style={style}
       >
-        {/* phones and tablets: a still of the phone until the live one is ready. Desktop never downloads these
-            (its <source> is an empty image), and a colour's still only loads once that colour is picked. */}
-        <div className="fold-still pointer-events-none absolute inset-x-4 top-8 bottom-8 lg:hidden" aria-hidden="true">
-          {COLOURWAYS.filter((c) => seen.includes(c.id)).map((c) => (
-            <picture key={c.id}>
-              <source media="(min-width: 1024px)" srcSet={EMPTY_IMAGE} />
-              <img
-                src={`/fold/poster-${c.id}.webp`}
-                alt=""
-                width={760}
-                height={601}
-                decoding="async"
-                fetchPriority={c.id === "pistachio" ? "high" : "auto"}
-                data-on={c.id === colour || undefined}
-                className="absolute inset-0 size-full object-contain opacity-0 transition-opacity duration-300 data-on:opacity-100"
-              />
-            </picture>
-          ))}
-        </div>
-
-        {/* desktop: until the live phone has drawn */}
-        <span className="fold-loading pointer-events-none absolute inset-0 hidden place-items-center font-mono text-12 font-medium text-faint lg:grid" aria-hidden="true">
-          Unfolding…
-        </span>
-
-        {load && (
-          <iframe
-            ref={frameRef}
-            src={EMBED}
-            onLoad={onFrameLoad}
-            title="Galaxy Z Fold8. Drag to turn it, use the Fold button to fold it, and tap the screen to use it."
-            className="fold-frame absolute inset-0 size-full border-0"
-          />
-        )}
-
-        {/* top: Fold (once the phone is live), colourways, Done */}
-        <div className="pointer-events-none absolute inset-x-4 top-4 z-10 flex items-center justify-between">
+        {/* top: the name or Fold, colourways, and on desktop Done */}
+        <div className="relative z-10 flex items-center justify-between px-4 pt-4 lg:pointer-events-none lg:absolute lg:inset-x-4 lg:top-4 lg:p-0">
           {ready ? (
             <button type="button" className="fs-btn pointer-events-auto" aria-label={`${foldLabel} the phone`} onClick={() => embed.current?.doc.getElementById("foldBtn")?.click()}>
               <FoldIcon />
@@ -226,8 +205,8 @@ export function FoldStage() {
             </div>
             {trying && (
               <>
-                <span className="fs-sep" aria-hidden="true" />
-                <button ref={doneRef} type="button" className="fs-btn" onClick={close}>
+                <span className="fs-sep hidden lg:block" aria-hidden="true" />
+                <button ref={doneTopRef} type="button" className="fs-btn hidden lg:inline-flex" onClick={close}>
                   <CloseIcon />
                   Done
                 </button>
@@ -236,22 +215,51 @@ export function FoldStage() {
           </div>
         </div>
 
-        {/* bottom: spec · Try it (or the hint while trying) · buy link */}
-        <div className="pointer-events-none absolute right-5 bottom-5 left-panel-text z-10 grid items-center gap-4 font-mono text-12 leading-none text-fs-muted md:grid-cols-foot">
+        {/* the phone: its own area below desktop, the whole panel on desktop */}
+        <div className="fold-area relative lg:absolute lg:inset-0">
+          {/* phones and tablets: a still of the phone until the live one is ready. Desktop never downloads these
+              (its <source> is an empty image), and a colour's still only loads once that colour is picked. */}
+          <div className="fold-still pointer-events-none absolute inset-x-4 inset-y-2 lg:hidden" aria-hidden="true">
+            {COLOURWAYS.filter((c) => seen.includes(c.id)).map((c) => (
+              <picture key={c.id}>
+                <source media="(min-width: 1024px)" srcSet={EMPTY_IMAGE} />
+                <img
+                  src={`/fold/poster-${c.id}.webp`}
+                  alt=""
+                  width={760}
+                  height={601}
+                  decoding="async"
+                  fetchPriority={c.id === "pistachio" ? "high" : "auto"}
+                  data-on={c.id === colour || undefined}
+                  className="absolute inset-0 size-full object-contain opacity-0 transition-opacity duration-300 data-on:opacity-100"
+                />
+              </picture>
+            ))}
+          </div>
+
+          {/* desktop: until the live phone has drawn */}
+          <span className="fold-loading pointer-events-none absolute inset-0 hidden place-items-center font-mono text-12 font-medium text-faint lg:grid" aria-hidden="true">
+            Unfolding…
+          </span>
+
+          {load && (
+            <iframe
+              ref={frameRef}
+              src={EMBED}
+              onLoad={onFrameLoad}
+              title="Galaxy Z Fold8. Drag to turn it, use the Fold button to fold it, and tap the screen to use it."
+              className="fold-frame absolute inset-0 size-full border-0"
+            />
+          )}
+        </div>
+
+        {/* bottom: spec · Try it, or the hint and Done while trying · buy link */}
+        <div className="pointer-events-none relative z-10 grid items-center justify-items-center gap-4 px-4 pb-4 font-mono text-12 leading-none text-fs-muted md:grid-cols-foot md:justify-items-stretch md:pr-5 md:pl-panel-text lg:absolute lg:right-5 lg:bottom-5 lg:left-panel-text lg:p-0">
           <span className="hidden md:inline">
             <b className="font-medium text-fs-ink">Galaxy Z Fold8</b>
             <span className="hidden xl:inline"> · {state}</span>
           </span>
-          <span className="grid justify-items-center">
-            {trying ? (
-              <span className="text-center">Drag to turn · Tap the screen to use it</span>
-            ) : (
-              <button ref={tryRef} type="button" aria-expanded={trying} onClick={open} className="fs-btn fs-btn-tinted pointer-events-auto">
-                <TryIcon />
-                Try it
-              </button>
-            )}
-          </span>
+          <span className="grid justify-items-center gap-3">{tryOrDone}</span>
           <a href={BUY} target="_blank" rel="noopener noreferrer" className="pointer-events-auto hidden justify-self-end rounded-tag font-medium text-fs-ink underline-offset-3 hover:underline md:inline">
             Like it? Buy it on Samsung.com <span aria-hidden="true">↗</span>
           </a>
