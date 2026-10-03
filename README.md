@@ -28,9 +28,23 @@ Every size comes from `src/app/globals.css`. Tailwind's default scales are switc
 |---|---|---|
 | Spacing | 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 | `p-1` … `p-10`, `gap-3`, `mt-5` … |
 | Type | 36 · 24 · 18 · 16 · 14 · 12 | `text-36` … `text-12` |
-| Corners | 4 · 8 · 12 · 24 · pill | `rounded-sm` · `rounded-md` · `rounded-lg` · `rounded-xl` · `rounded-full` |
+| Corners | by role, see below | `rounded-tag` · `rounded-control` · `rounded-surface` · `rounded-sheet` · `rounded-full` |
 | Colour | page, ink, muted, faint, rule, hover, slot, accent, on-accent | `text-ink`, `bg-slot`, `border-rule` … |
 | Fonts | Bricolage Grotesque (titles), Geist, Geist Mono | `font-title`, `font-sans`, `font-mono` |
+
+### Corners
+
+The same kind of element always gets the same corner:
+
+| Role | Radius | Used for |
+|---|---|---|
+| `rounded-tag` | 4px | small labels, keys, chips inside a control |
+| `rounded-control` | 8px | anything you click: nav links, sidebar rows, Try it, Done, Fold |
+| `rounded-surface` | 12px | containers: the Fold stage, work tiles, footer tiles, panels |
+| `rounded-sheet` | 24px | large overlays (none yet) |
+| `rounded-full` | pill / circle | avatar, colour dots, live dot, pill buttons |
+
+The mini interfaces drawn inside the work thumbnails are illustrations, not site controls, but they use the same scale.
 
 A class that isn't on the scale (`gap-11`, `text-xl`) generates nothing, and arbitrary values (`gap-[13px]`) fail `npm run check:tokens`.
 To add a step, add it to `globals.css` and this table, not to one component.
