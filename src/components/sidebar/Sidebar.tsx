@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { BotState } from "@/lib/bot/engine";
 import { avatar } from "@/lib/bot/avatar";
@@ -15,7 +16,7 @@ const RESUME = "/Panth%20Shah%20FT%20Resume.pdf"; // same path as the old site, 
 
 const NAV: { label: string; href: string; icon: IconName; react: BotState; external?: boolean; soon?: boolean }[] = [
   { label: "Work", href: "/#work", icon: "work", react: "reading" },
-  { label: "About", href: "/about", icon: "about", react: "happy", soon: true },
+  { label: "About", href: "/about", icon: "about", react: "happy" },
   { label: "Playground", href: "/playground", icon: "play", react: "snack", soon: true },
   { label: "Resume", href: RESUME, icon: "resume", react: "thinking", external: true },
 ];
@@ -63,6 +64,7 @@ function Ext() {
  * Smaller screens: the same panel is a bar across the top; "Menu" opens the links inside it.
  */
 export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [appearance, setAppearance] = useState(false);
   const xrayOn = useXray();
@@ -146,7 +148,7 @@ export function Sidebar({ idleAvatar }: { idleAvatar: string }) {
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" data-xr="Nav / Link" className={ROW} onClick={close} {...reacts(react)}>{body}</a>
             ) : (
               // pages still to be built aren't prefetched (a prefetch of a missing page logs a 404)
-              <Link key={label} href={href} prefetch={soon ? false : undefined} data-xr="Nav / Link" className={ROW} onClick={close} {...reacts(react)}>{body}</Link>
+              <Link key={label} href={href} prefetch={soon ? false : undefined} aria-current={pathname === href ? "page" : undefined} data-xr="Nav / Link" className={`${ROW} aria-[current=page]:bg-hover aria-[current=page]:text-ink`} onClick={close} {...reacts(react)}>{body}</Link>
             );
           })}
         </nav>

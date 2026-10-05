@@ -1,6 +1,5 @@
-/* The footer: Panth's two doodles with San Francisco's live time between them (from the prototype).
-   Three squares when there's room (≥ 960px of content, as at 1440); the clock across the top with the doodles
-   side by side below that; one column on phones. */
+/* The footer. 960px of content and up: one full-width scene (see .strip). Below that: Panth's two square doodles
+   with the clock tile, the clock across the top with the doodles side by side, or one column on phones. */
 
 .footer { container: footer / inline-size; }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--spacing-5); }
@@ -14,10 +13,22 @@
   .night { grid-area: night; }
   .clock { grid-area: clock; }
 }
-@container footer (min-width: 960px) {
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "day clock night"; }
-  .clock { aspect-ratio: 1; }
+
+/* wide screens: one scene across the full width (1132 × 360 at 1440). Golden Gate by day, Twin Peaks by night;
+   the time in the open sky top right, the place bottom right, the scene's name top left on hover. 32px insets. */
+.strip {
+  display: none; position: relative; aspect-ratio: 1132 / 360; overflow: hidden; border-radius: var(--radius-surface);
+  background: #d2f2fd; color: #0b465e; transition: color 0.6s;
 }
+.strip[data-phase="night"] { background: #032660; color: #ffe072; }
+.sceneDay, .sceneNight { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s; }
+.strip[data-phase="day"] .sceneNight, .strip[data-phase="night"] .sceneDay { opacity: 0; }
+.when, .where { position: absolute; right: var(--spacing-6); display: grid; justify-items: end; text-align: right; }
+.when { top: var(--spacing-6); }
+.where { bottom: var(--spacing-6); }
+.strip .time { font-size: 56px; }
+.name { position: absolute; top: var(--spacing-6); left: var(--spacing-6); opacity: 0; transition: opacity 0.25s; }
+.strip:hover .name, .strip:focus-within .name { opacity: 1; }
 
 /* the clock takes the day doodle's sky and darkest teal, or the night doodle's sky and window light */
 .clock {
@@ -51,4 +62,10 @@
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-@media (prefers-reduced-motion: reduce) { .live { animation: none; } .clock { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .live { animation: none; } .clock, .strip, .sceneDay, .sceneNight, .name { transition: none; } }
+
+/* the switch between the two layouts (last, so it wins) */
+@container footer (min-width: 960px) {
+  .grid { display: none; }
+  .strip { display: block; }
+}

@@ -1,23 +1,21 @@
-import { ClockTile } from "./ClockTile";
+import { getImageProps } from "next/image";
+import dayScene from "@/assets/footer/golden-gate-day.webp";
+import { FooterScenes } from "./FooterScenes";
 import s from "./footer.module.css";
 
-/** Golden Gate by day · the live Bay Area time · Twin Peaks by night, then the made-with line. On the content's edges. */
+/** San Francisco by day or night with the live time, then the credits. On the content's edges, on every page. */
 export function Footer() {
+  // the day scene is a picture (the night one is a vector): served at the screen's size
+  const { src, srcSet, sizes, width, height } = getImageProps({ src: dayScene, alt: "", sizes: "(min-width: 1024px) calc(100vw - 308px), 100vw" }).props;
   return (
     <footer aria-labelledby="footer-title" className={`${s.footer} px-5 pb-7 lg:pr-5 lg:pl-rail`}>
       <h2 id="footer-title" className="sr-only">San Francisco Bay Area</h2>
-      <div className={s.grid}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div data-xr="Footer / Golden Gate" className={`${s.tile} ${s.art} ${s.day}`}><img src="/footer/golden-gate.svg" alt="Doodle of the Golden Gate Bridge by day, with a sailboat on the bay" loading="lazy" decoding="async" /></div>
-        <ClockTile className={s.tile} />
-        {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div data-xr="Footer / Twin Peaks" className={`${s.tile} ${s.art} ${s.night}`}><img src="/footer/twin-peaks.svg" alt="Doodle of the city lights at night from Twin Peaks, with car light trails on the winding road" loading="lazy" decoding="async" /></div>
-      </div>
-      <div className="mt-4 flex flex-wrap items-end justify-between gap-5 text-14 text-muted">
+      <FooterScenes day={{ src, srcSet, sizes, width, height }} />
+      <div className="mt-4 flex flex-wrap items-end justify-between gap-x-5 gap-y-1 text-14 text-muted">
         <p>
-          Made with <span aria-hidden="true">♥</span><span className="sr-only">love</span> using Claude and Figma
+          © 2026 Panth Shah · Made with <span aria-hidden="true">♥</span><span className="sr-only">love</span> using Claude and Figma
         </p>
-        <p>© 2026 Panth Shah</p>
+        <p>Illustrations made using Quiver AI in Paper</p>
       </div>
     </footer>
   );

@@ -1,0 +1,39 @@
+/* The About page (from the prototype). Bio beside the photos; then the contact sheet. */
+
+.intro { display: grid; gap: var(--spacing-7) var(--spacing-5); }
+@media (min-width: 1100px) { .intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.bio { display: grid; gap: var(--spacing-4); align-content: start; }
+.bio p { max-width: 60ch; text-wrap: pretty; }
+.facts { margin-top: var(--spacing-4); border-top: 1px solid var(--rule); }
+.facts div { display: grid; grid-template-columns: 96px 1fr; gap: var(--spacing-4); padding: var(--spacing-3) 0; border-bottom: 1px solid var(--rule); }
+
+/* three photos: one tall, two stacked; the same box as the bio column at 1440 (554 × 440) */
+.collage { display: grid; grid-template-columns: 1.25fr 1fr; grid-template-rows: 1fr 1fr; gap: var(--spacing-3); aspect-ratio: 554 / 440; }
+@media (min-width: 768px) { .collage { gap: var(--spacing-5); } }
+.collage figure { overflow: hidden; border-radius: var(--radius-surface); background: var(--slot); }
+.collage figure:first-child { grid-row: 1 / 3; }
+.collage img, .shot img { width: 100%; height: 100%; object-fit: cover; transition: scale 0.6s var(--ease-out); }
+.collage figure:hover img, .shot:hover img { scale: 1.03; }
+
+/* contact sheet: rows that each span the full width, every photo whole (no cropping).
+   A photo's width is its share of its row: its aspect ratio / the row's ratios added up.
+   Rows of three from 768px; on phones two portraits, then a landscape on its own. */
+.sheet { display: flex; flex-wrap: wrap; gap: var(--g); --g: var(--spacing-3); }
+.shot {
+  display: block; flex: none; overflow: hidden; border-radius: var(--radius-surface); background: var(--slot); cursor: zoom-in;
+  order: var(--mo); aspect-ratio: var(--ar);
+  width: calc((100% - var(--g) * (var(--mn) - 1)) * var(--r) / var(--msum) - 0.02px);
+}
+@media (min-width: 768px) {
+  .sheet { --g: var(--spacing-5); }
+  .shot { order: 0; width: calc((100% - var(--g) * 2) * var(--r) / var(--sum) - 0.02px); }
+}
+
+/* a photo, large */
+.big { display: none; place-items: center; width: 100vw; height: 100dvh; max-width: none; max-height: none; padding: 0; border: 0; background: none; cursor: zoom-out; }
+.big[open] { display: grid; }
+.big::backdrop { background: rgb(10 10 11 / 0.86); }
+.big img { max-width: calc(100vw - 48px); max-height: calc(100dvh - 96px); width: auto; height: auto; border-radius: var(--radius-surface); }
+.big p { position: fixed; right: 0; bottom: var(--spacing-5); left: 0; text-align: center; color: #ededeb; }
+
+@media (prefers-reduced-motion: reduce) { .collage img, .shot img { transition: none; } }

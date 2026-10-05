@@ -24,8 +24,14 @@ const RHYTHM: [string, string, "below" | "beside" | "inset"][] = [
   ["Heading / Selected work", "Card / Samsung", "below"],
   ["Card / Samsung", "Card / Founderway", "beside"],
   ["Card / Samsung", "Card / Northeastern", "below"],
+  ["Card / Northeastern", "Footer / Scene", "below"],
   ["Card / Northeastern", "Footer / Golden Gate", "below"],
   ["Footer / Golden Gate", "Footer / Clock", "beside"],
+  // About
+  ["Nav / Sidebar", "Heading / About", "beside"],
+  ["List / Facts", "Heading / Gallery", "below"],
+  ["Heading / Gallery", "Photos / Contact sheet", "below"],
+  ["Photos / Contact sheet", "Footer / Scene", "below"],
 ];
 // small, repeated parts: outlined, but not tagged (their names would cover each other)
 const QUIET = new Set(["Nav / Link", "Avatar / Live"]);
