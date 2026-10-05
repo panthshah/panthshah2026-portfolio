@@ -9,11 +9,11 @@ export type Section = { id: string; label: string };
 /**
  * Reading mode for a case study: the sidebar steps aside and a slim bar takes its place, with the way home and the
  * page's sections (the one being read is marked). The sidebar button brings the sidebar back, and tucks it away again.
- * Phones keep the normal top bar; there is no section bar there.
+ * Phones keep the normal top bar; there is no section bar there. `accent` is the project's colour (figures, markers).
  * How it works: this wrapper carries data-reading="closed|open"; globals.css moves the sidebar, the page and the
  * footer off that attribute, so the page is laid out correctly before any script runs.
  */
-export function Reading({ sections, children }: { sections: Section[]; children: ReactNode }) {
+export function Reading({ sections, accent, children }: { sections: Section[]; accent?: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(-1);
 
@@ -31,7 +31,7 @@ export function Reading({ sections, children }: { sections: Section[]; children:
   }, [sections]);
 
   return (
-    <div data-reading={open ? "open" : "closed"}>
+    <div data-reading={open ? "open" : "closed"} style={accent ? ({ "--case-accent": accent } as React.CSSProperties) : undefined}>
       <div className={s.bar}>
         <button type="button" className={s.fold} aria-label={open ? "Hide the sidebar" : "Show the sidebar"} aria-pressed={open} onClick={() => setOpen((v) => !v)}>
           <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H80V200H40ZM216,200H96V56H216V200Z" /></svg>
