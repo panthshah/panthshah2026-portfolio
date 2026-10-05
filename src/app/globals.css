@@ -313,3 +313,19 @@
     }
   }
 }
+
+/* Reading mode (case studies): the page carries [data-reading]; while it says "closed" the sidebar steps aside and
+   the page and footer take the full width. Done with :has(), so it is right before any script runs. Desktop only. */
+@media (min-width: 1024px) {
+  body:has([data-reading]) [data-xr="Nav / Sidebar"] { transition: transform 0.3s var(--ease-out), opacity 0.3s, visibility 0s; }
+  body:has([data-reading]) :is(main, footer) { transition: padding-left 0.3s var(--ease-out); }
+  body:has([data-reading]) main { padding-top: var(--spacing-9); } /* under the reading bar */
+  body:has([data-reading="closed"]) [data-xr="Nav / Sidebar"] {
+    transform: translateX(calc(-100% - var(--spacing-3))); opacity: 0; visibility: hidden; pointer-events: none;
+    transition: transform 0.3s var(--ease-out), opacity 0.3s, visibility 0s 0.3s;
+  }
+  body:has([data-reading="closed"]) :is(main, footer) { padding-left: var(--spacing-5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has([data-reading]) [data-xr="Nav / Sidebar"], body:has([data-reading]) :is(main, footer) { transition: none; }
+}
