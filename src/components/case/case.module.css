@@ -125,3 +125,14 @@
 .solo{max-width:100%}
 .told strong{font-weight:500;color:var(--color-ink)}
 .photo{aspect-ratio:4/3;object-fit:cover!important}
+
+/* an icon in a soft tile, above a title and its line */
+.glyph{display:grid;place-items:center;width:var(--spacing-7);height:var(--spacing-7);margin-bottom:var(--spacing-2);border-radius:var(--radius-surface);background:var(--color-slot);color:var(--color-ink)}
+.glyph svg{width:var(--spacing-5);height:var(--spacing-5)}
+/* a count, drawn: one small browser window per website */
+.sites{display:flex;flex-wrap:wrap;gap:var(--spacing-3);margin-bottom:var(--spacing-4)}
+.sites svg{width:var(--spacing-7);height:var(--spacing-7);color:var(--case-accent, var(--color-samsung))}
+.cover img{aspect-ratio:16/9;object-fit:cover}
+/* a numbered finding with a line of explanation under it */
+.find.long span{display:grid;gap:var(--spacing-2)}
+.find.long em{font:400 18px/28px var(--font-sans);font-style:normal;letter-spacing:0;color:var(--color-muted);text-wrap:pretty}

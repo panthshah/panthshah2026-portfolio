@@ -16,7 +16,7 @@ import s from "./scenes.module.css";
 const PROJECTS: { xr: string; href: string; colour: string; title: string; desc: string; meta: string; scene: ReactNode }[] = [
   { xr: "Card / Samsung", href: "/samsung", colour: "#2F5BCF", title: "Smarter Product Comparisons", desc: "Redesigning the compare experience for Samsung.com's Product Finder", meta: "Samsung Electronics · 2025", scene: <SamsungScene /> },
   { xr: "Card / Founderway", href: "/foundermatch", colour: "#6B4FD0", title: "Better Co-founder Matching", desc: "A co-founder matching platform that drove 200+ sign-ups on launch day", meta: "Founderway · 2024-25", scene: <FounderwayScene /> },
-  { xr: "Card / Northeastern", href: "/northeastern", colour: "#C9452F", title: "Designing for Access", desc: "Auditing accessibility across 10+ university websites for 30,000+ students", meta: "Northeastern University · 2023-24", scene: <NortheasternScene /> },
+  { xr: "Card / Northeastern", href: "/northeastern", colour: "#C9452F", title: "Designing for Access", desc: "Auditing accessibility across 7 university websites for 30,000+ students", meta: "Northeastern University · 2023-24", scene: <NortheasternScene /> },
 ];
 
 /** Selected work: a 2 × 2 grid (one column on phones) on the same edges as the statement and the Fold8. */
