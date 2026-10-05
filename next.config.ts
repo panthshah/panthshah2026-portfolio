@@ -16,7 +16,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/fold/three.min.js", headers: forever },
       { source: "/fold/fonts/:file*", headers: forever },
-      { source: "/playground/:file(.+\\.mp4)", headers: forever }, // the Playground films are named after their posts
+      { source: "/playground/:file(.+\\.mp4)", headers: forever },
+      { source: "/case/:path*", headers: forever }, // case study films // the Playground films are named after their posts
     ];
   },
   images: {

@@ -1,0 +1,111 @@
+/* Case study template. The written system (type, spacing, shapes) is in the prototype folder as CASE-STUDY-SYSTEM.md:
+   · sidebar aside, a slim bar in its place; content max 1392, centred
+   · opening full width; then every section is two columns: words left (they stay put), things to look at right
+   · type, both columns: 36 display · 24 lead · 18 body · 14 label (no monospace)
+   · spacing: 128 sections · 96 rows of one section · 48 sub-part · 32 around pictures · 24 blocks · 16 paragraphs · 12 label · 8 title→text */
+
+.flow{display:flex;flex-direction:column;min-width:0}
+.flow > *{margin:0}
+.flow > * + *{margin-top:var(--spacing-4)}
+.flow > .eyebrow + *{margin-top:var(--spacing-3)}
+.flow > .name + *{margin-top:var(--spacing-5)}
+.flow > * + .block{margin-top:var(--spacing-6)}
+.flow > .block + .block{margin-top:var(--spacing-5)}
+.flow > .block + :not(.block){margin-top:var(--spacing-6)}
+.flow > * + .part.part{margin-top:var(--spacing-7)}
+.sec{margin-top:var(--spacing-10);padding-top:var(--spacing-6);border-top:1px solid var(--color-rule);scroll-margin-top:var(--spacing-9);display:grid;gap:var(--spacing-6)}
+.sec.first{margin-top:0;padding-top:0;border-top:0;display:flex;gap:0}
+@media (min-width:1024px){
+  .sec{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:0 var(--spacing-7)}
+  .told{position:sticky;top:var(--spacing-9);align-self:start}
+}
+
+.title{font:500 24px/1.25 var(--font-title);letter-spacing:-.02em;text-wrap:balance}
+@media (min-width:768px){.title{font-size:36px;line-height:1.15;letter-spacing:-.025em}}
+/* type: one family for reading (Geist), one for saying (Bricolage). Big confident headings, quiet grey words, no tiny code-style labels */
+.eyebrow{font:500 14px/20px var(--font-sans);color:var(--color-muted)}
+.name{align-self:flex-start;height:28px;padding:0 var(--spacing-3);border-radius:999px;box-shadow:inset 0 0 0 1px var(--color-rule);font:500 14px/28px var(--font-sans);color:var(--color-ink)}
+.flow > h2{font:500 24px/1.25 var(--font-title);letter-spacing:-.02em;text-wrap:balance}
+.told > p,.told .part > p{color:var(--color-muted)}
+.flow > h3{font:500 18px/28px var(--font-sans)}
+.flow > p:not(.eyebrow):not(.name):not(.say){font-size:18px;line-height:28px;text-wrap:pretty}
+.say{font:500 24px/1.25 var(--font-title);letter-spacing:-.02em;text-wrap:pretty}
+.lede{color:var(--color-muted);text-wrap:balance}
+.read{max-width:1392px;margin-inline:auto}
+/* a second row inside a section: words left, pictures right, 96 below the first */
+.sec.cont{margin-top:var(--spacing-7);padding-top:0;border-top:0}
+@media (min-width:1024px){.sec.cont{margin-top:var(--spacing-9)}}
+
+/* customers' words, as a conversation */
+.voices{display:grid;gap:var(--spacing-5)}
+.voice{display:grid;gap:var(--spacing-2);margin:0;max-width:80%}
+.voice:nth-child(even){justify-self:end;justify-items:end;text-align:right}
+.voice blockquote{margin:0;padding:var(--spacing-4) var(--spacing-5);border-radius:24px 24px 24px 4px;background:var(--color-slot);font:400 18px/28px var(--font-sans);text-align:left;text-wrap:pretty}
+.voice:nth-child(even) blockquote{border-radius:24px 24px 4px 24px}
+.voice figcaption{font:500 14px/20px var(--font-sans);color:var(--color-muted)}
+/* the two figures, drawn: how far people scrolled, and how many people */
+.stat .pic{height:240px;display:flex;align-items:flex-end;margin-bottom:var(--spacing-4)}
+.depth{position:relative;width:180px;height:240px;border-radius:12px;overflow:hidden;background:repeating-linear-gradient(var(--color-slot) 0 18px,transparent 18px 24px);box-shadow:inset 0 0 0 1px var(--color-rule)}
+.depth i{position:absolute;inset:0 0 auto 0;height:10%;background:var(--color-samsung)}
+.dots{display:grid;grid-template-columns:repeat(10,15px);gap:10px;width:240px}
+.dots i{width:15px;height:15px;border-radius:50%;background:var(--color-ink)}
+
+.block{min-width:0}
+.grid{display:grid;gap:var(--spacing-5)}
+@media (min-width:700px){.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.frame{border-radius:12px;overflow:hidden;background:var(--color-slot)}
+.frame video,.frame img{display:block;width:100%;height:auto}
+.shown .frame video,.shown .frame img{max-height:min(72vh,640px);object-fit:contain}
+.facts{margin:0}
+.item{display:flex;flex-direction:column;gap:var(--spacing-2);min-width:0}
+.item > *{margin:0}
+.item p{font-size:18px;line-height:28px}
+.item .meta,.item dt{font:500 14px/20px var(--font-sans);color:var(--color-muted)}
+.item .num{font:500 36px/1.15 var(--font-title);letter-spacing:-.025em}
+.item h3{font:500 18px/28px var(--font-sans)}
+.item .small{font-size:18px;line-height:28px;color:var(--color-muted)}
+.item dd{margin:0;font-size:18px;line-height:28px}
+.crop{aspect-ratio:1024/816;object-fit:cover!important;object-position:top}
+.shot{display:flex;flex-direction:column;gap:var(--spacing-3);margin:0;min-width:0}
+.shot figcaption{font-size:18px;line-height:28px;color:var(--color-muted)}
+.shot figcaption strong{font-weight:500;color:var(--color-ink)}
+
+.scores{width:100%;border-collapse:collapse;font-size:18px;line-height:28px;table-layout:fixed}
+.scores th,.scores td{height:56px;padding:0;border-bottom:1px solid var(--color-rule);text-align:center}
+.scores th:first-child,.scores td:first-child{text-align:left;width:44%}
+.scores thead th{font:500 14px/20px var(--font-sans);color:var(--color-muted)}
+.scores .us{color:var(--color-samsung)}
+.scores tfoot td{font-weight:500;font-variant-numeric:tabular-nums;border-bottom:0}
+.yes,.no{display:inline-block;width:16px;height:16px;vertical-align:-3px}
+.no{color:var(--color-muted);opacity:.6}
+.tally{display:none;border-top:1px solid var(--color-rule)}
+.tally div{display:grid;grid-template-columns:1fr auto;gap:2px var(--spacing-4);padding:var(--spacing-3) 0;border-bottom:1px solid var(--color-rule)}
+.tally b{font-weight:500} .tally span{font-weight:500;font-variant-numeric:tabular-nums} .tally p{grid-column:1 / -1;margin:0;font-size:18px;line-height:28px;color:var(--color-muted)}
+@media (max-width:699px){.scores{display:none} .tally{display:grid}}
+.groups{display:none;gap:var(--spacing-5);grid-template-columns:repeat(2,minmax(0,1fr))}
+.groups h3{margin:0 0 var(--spacing-1);font:500 18px/28px var(--font-sans)}
+.groups ul{margin:0;padding:0;list-style:none;color:var(--color-muted);font-size:18px;line-height:28px}
+@media (max-width:767px){.groups{display:grid} .ia{display:none}}
+
+.next{display:flex;flex-direction:column;gap:var(--spacing-2);margin-top:var(--spacing-10);padding-top:var(--spacing-6);border-top:1px solid var(--color-rule)}
+.next > *{margin:0}
+.next .name{margin-bottom:var(--spacing-4);align-self:flex-start}
+.next a{display:flex;justify-content:space-between;align-items:center;gap:var(--spacing-5);font:500 24px/1.25 var(--font-title);letter-spacing:-.02em}
+.next a svg{width:24px;height:24px;flex:none;transition:transform .2s var(--ease-out)}
+.next a:hover svg{transform:translateX(4px)}
+.next .small{font-size:18px;line-height:28px;color:var(--color-muted)}
+
+/* the bar that stands in for the sidebar (desktop only; the sidebar and page themselves move in globals.css) */
+.bar{display:none}
+@media (min-width:1024px){
+  .bar{display:flex;align-items:center;gap:var(--spacing-1);position:fixed;z-index:35;top:var(--spacing-3);left:var(--spacing-3);right:var(--spacing-3);height:52px;padding:0 var(--spacing-2);border-radius:var(--radius-surface);background:var(--glass);
+    -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);box-shadow:inset 0 0 0 1px var(--color-rule),var(--shadow-panel);transition:left .3s var(--ease-out)}
+  .bar button,.bar a{display:inline-flex;align-items:center;gap:var(--spacing-2);height:var(--spacing-control);padding:0 var(--spacing-3);border-radius:var(--radius-control);font-size:var(--text-14);color:var(--color-muted);white-space:nowrap;transition:color .16s,background .16s}
+  .bar button:hover,.bar a:hover,.bar a[aria-current]{background:var(--color-hover);color:var(--color-ink)}
+  .bar svg{width:var(--spacing-icon);height:var(--spacing-icon);flex:none}
+  .bar .fold{padding:0;width:var(--spacing-control);justify-content:center}
+  .sep{width:1px;height:20px;margin-inline:var(--spacing-2);background:var(--color-rule);flex:none}
+  .bar nav{display:flex;gap:2px;min-width:0;overflow-x:auto;scrollbar-width:none}
+  [data-reading="open"] .bar{left:calc(var(--spacing-rail) - var(--spacing-3))}
+}
+@media (prefers-reduced-motion:reduce){.bar{transition:none}}
