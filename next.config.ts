@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/home", destination: "/", permanent: true }, // the old site's home address
       { source: "/phone", destination: "/", permanent: true }, // the old 3D phone page; the Fold8 on the home page took its place
+      // one address for the site: www sends people to the plain domain, keeping the page they asked for
+      { source: "/:path*", has: [{ type: "host", value: "www.panthshah.work" }], destination: "https://panthshah.work/:path*", permanent: true },
     ];
   },
   // three.js and the Onest files inside the Fold8 page, and the Playground films, never change (a new version gets a new name), so browsers keep them
