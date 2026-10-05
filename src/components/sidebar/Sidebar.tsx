@@ -17,7 +17,7 @@ const RESUME = "/Panth%20Shah%20FT%20Resume.pdf"; // same path as the old site, 
 const NAV: { label: string; href: string; icon: IconName; react: BotState; external?: boolean; soon?: boolean }[] = [
   { label: "Work", href: "/#work", icon: "work", react: "reading" },
   { label: "About", href: "/about", icon: "about", react: "happy" },
-  { label: "Playground", href: "/playground", icon: "play", react: "snack", soon: true },
+  { label: "Playground", href: "/playground", icon: "play", react: "snack" },
   { label: "Resume", href: RESUME, icon: "resume", react: "thinking", external: true },
 ];
 const CONTACT = [

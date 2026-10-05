@@ -30,6 +30,10 @@ const RHYTHM: [string, string, "below" | "beside" | "inset"][] = [
   ["List / Facts", "Heading / Gallery", "below"],
   ["Heading / Gallery", "Photos / Contact sheet", "below"],
   ["Photos / Contact sheet", "Footer / Scene", "below"],
+  // Playground
+  ["Nav / Sidebar", "Heading / Playground", "beside"],
+  ["Heading / Playground", "Playground / Wall", "below"],
+  ["Playground / Wall", "Footer / Scene", "below"],
 ];
 // small, repeated parts: outlined, but not tagged (their names would cover each other)
 const QUIET = new Set(["Nav / Link", "Avatar / Live"]);
