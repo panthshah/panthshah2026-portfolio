@@ -232,8 +232,7 @@ export default function Founderway() {
         </div>
       </section>
 
-      {/* until the Northeastern page exists, the way on loops back to Samsung */}
-      <NextProject href="/samsung" title="Smarter Product Comparisons" meta="Samsung Electronics · 2025" />
+      <NextProject href="/northeastern" title="Designing for Access" meta="Northeastern University · 2024" />
     </Reading>
   );
 }
