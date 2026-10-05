@@ -60,12 +60,12 @@ export default function Northeastern() {
   return (
     <Reading sections={SECTIONS} accent="var(--color-northeastern)">
       <section id="overview" className={`${s.sec} ${s.first} ${s.flow}`}>
-        <p className={s.eyebrow}>Northeastern University · Sep 2024 – Dec 2024</p>
+        <p className={s.eyebrow}>Northeastern University · 2023 – 2024</p>
         <h1 className={s.title}>Auditing accessibility across Northeastern University websites</h1>
         <p className={s.lede}>We conducted accessibility tests based on the WCAG 2.1 guidelines and a checklist provided by the digital accessibility team at Northeastern University. This case study highlights the key findings and lessons learned from testing seven Northeastern University websites using various accessibility tools.</p>
         <div className={`${s.block} ${s.frame} ${s.cover}`}><Image src={seal} alt="The Northeastern University seal" sizes="(min-width: 1440px) 1392px, 100vw" priority /></div>
         <dl className={`${s.block} ${s.grid} ${s.g4} ${s.facts}`}>
-          <div className={s.item}><dt>Timeline</dt><dd>Sep 2024 – Dec 2024</dd></div>
+          <div className={s.item}><dt>Timeline</dt><dd>2023 – 2024</dd></div>
           <div className={s.item}><dt>Team</dt><dd>4 Designers</dd><dd>Digital Accessibility Team</dd></div>
           <div className={s.item}><dt>Tools</dt><dd>WAVE</dd><dd>ARIA Patterns</dd><dd>Bookmarklets</dd></div>
           <div className={s.item}><dt>Disciplines</dt><dd>Accessibility</dd><dd>WCAG 2.1</dd><dd>UX Auditing</dd></div>

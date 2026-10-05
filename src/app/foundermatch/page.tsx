@@ -232,7 +232,7 @@ export default function Founderway() {
         </div>
       </section>
 
-      <NextProject href="/northeastern" title="Designing for Access" meta="Northeastern University · 2024" />
+      <NextProject href="/northeastern" title="Designing for Access" meta="Northeastern University · 2023-24" />
     </Reading>
   );
 }

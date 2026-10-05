@@ -10,12 +10,12 @@ import { LiveTiles } from "./LiveTiles";
 import { PlaygroundBot } from "./PlaygroundBot";
 import s from "./scenes.module.css";
 
-// Copy carried over from the prototype. Still to confirm against the case studies: Founderway "200+ sign-ups on
-// launch day" and 2024-25; Northeastern "10+ university websites", "30,000+ students" and 2023-24; the Playground
-// line is a draft. Case study routes keep the old site's URLs.
+// Copy carried over from the prototype. Dates and "7 websites" are confirmed by Panth. Still to confirm:
+// Founderway "200+ sign-ups on launch day" (the case study says "onboarded 200+ new users post-launch") and
+// Northeastern "30,000+ students"; the Playground line is a draft. Case study routes keep the old site's URLs.
 const PROJECTS: { xr: string; href: string; colour: string; title: string; desc: string; meta: string; scene: ReactNode }[] = [
   { xr: "Card / Samsung", href: "/samsung", colour: "#2F5BCF", title: "Smarter Product Comparisons", desc: "Redesigning the compare experience for Samsung.com's Product Finder", meta: "Samsung Electronics · 2025", scene: <SamsungScene /> },
-  { xr: "Card / Founderway", href: "/foundermatch", colour: "#6B4FD0", title: "Better Co-founder Matching", desc: "A co-founder matching platform that drove 200+ sign-ups on launch day", meta: "Founderway · 2024-25", scene: <FounderwayScene /> },
+  { xr: "Card / Founderway", href: "/foundermatch", colour: "#6B4FD0", title: "Better Co-founder Matching", desc: "A co-founder matching platform that drove 200+ sign-ups on launch day", meta: "Founderway · 2024", scene: <FounderwayScene /> },
   { xr: "Card / Northeastern", href: "/northeastern", colour: "#C9452F", title: "Designing for Access", desc: "Auditing accessibility across 7 university websites for 30,000+ students", meta: "Northeastern University · 2023-24", scene: <NortheasternScene /> },
 ];
 
