@@ -1,0 +1,30 @@
+/* Playground: a wall of posts. Columns are equal, 24 apart; posts are 48 apart; tops line up, ends stagger.
+   Three columns from 1280, two from 700, one below (each is its own copy of the wall; see Wall.tsx). */
+
+.walls { margin-top: var(--spacing-7); }
+.wall { display: none; align-items: flex-start; gap: var(--spacing-5); }
+.w1 { display: flex; }
+@media (min-width: 700px) { .w1 { display: none; } .w2 { display: flex; } }
+@media (min-width: 1280px) { .w2 { display: none; } .w3 { display: flex; } }
+.col { flex: 1 1 0; min-width: 0; display: grid; gap: var(--spacing-7); }
+
+.post { display: grid; gap: var(--spacing-3); min-width: 0; }
+.clip { position: relative; overflow: hidden; border-radius: var(--radius-surface); background: var(--color-slot); }
+.clip img, .clip video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+.sound {
+  position: absolute; right: var(--spacing-2); bottom: var(--spacing-2); width: var(--spacing-6); height: var(--spacing-6);
+  display: grid; place-items: center; border-radius: var(--radius-control);
+  background: rgb(17 18 19 / 0.6); color: #fff; opacity: 0; transition: opacity 0.16s;
+}
+.clip:hover .sound, .sound:focus-visible, .sound[aria-pressed="true"] { opacity: 1; }
+@media (hover: none) { .sound { opacity: 1; } }
+.sound svg { width: var(--spacing-icon); height: var(--spacing-icon); }
+.on, .sound[aria-pressed="true"] .off { display: none; }
+.sound[aria-pressed="true"] .on { display: block; }
+
+.say { font-size: var(--text-14); line-height: 20px; color: var(--color-ink); white-space: pre-line; overflow-wrap: anywhere; }
+.by { display: flex; justify-content: space-between; gap: var(--spacing-4); font: 400 var(--text-12) / 16px var(--font-mono); color: var(--color-muted); }
+.by a { display: inline-flex; align-items: center; gap: var(--spacing-1); transition: color 0.16s; }
+.by a:hover, .by a:focus-visible { color: var(--color-ink); }
+.by svg { width: var(--spacing-3); height: var(--spacing-3); }
