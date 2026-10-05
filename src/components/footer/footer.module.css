@@ -1,5 +1,5 @@
-/* The footer: one scene across the content width. Golden Gate by day, Twin Peaks by night (San Francisco time);
-   the time in the open sky top right, the place bottom right, the scene's name top left on hover.
+/* The footer: San Francisco from Twin Peaks across the content width, coloured live for the hour and the weather
+   there (see lib/scene/engine.ts); the time top right, the place bottom right, the scene's name top left on hover.
    1132 × 360 at 1440. Narrower screens get a taller frame (the scene is cropped at the sides, never squashed)
    and the type and insets scale with the frame, so the clock always fits. */
 
@@ -8,23 +8,37 @@
   container-type: inline-size;
   --inset: clamp(16px, 2.83cqi, 32px); /* 32px on the wide frame */
   position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-surface);
-  background: #d2f2fd; color: #0b465e; transition: color 0.6s;
+  background: var(--sky, #032660); /* the night sky until the scene arrives */
 }
 @container footer (min-width: 560px) { .strip { aspect-ratio: 2 / 1; } }
 @container footer (min-width: 960px) { .strip { aspect-ratio: 1132 / 360; } }
-.strip[data-phase="night"] { background: #032660; color: #ffe072; }
 
-.sceneDay, .sceneNight { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s; }
-.sceneDay { object-position: 28% 50%; } /* cropped frames keep both towers */
-.sceneNight { object-position: 72% 50%; } /* phones: the moon and the road stay clear of the text */
-@container footer (min-width: 560px) { .sceneNight { object-position: 46% 50%; } } /* wider: the skyline and the road */
-.strip[data-phase="day"] .sceneNight, .strip[data-phase="night"] .sceneDay { opacity: 0; }
+/* the scene is cropped like a photo: full height, and its sides fall away as the frame narrows */
+.art { position: absolute; inset: 0; }
+.art :global(svg), .art img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none; aspect-ratio: 2452.7 / 780;
+  transform: translateX(calc((100cqi - 100%) * var(--crop, 0.72))); /* phones: the moon and the road stay clear of the text */
+}
+@container footer (min-width: 560px) { .art :global(svg), .art img { --crop: 0.46; } } /* wider: the skyline and the road */
+@container footer (min-width: 960px) { .art :global(svg), .art img { width: 100%; transform: none; } }
+
+/* weather in motion, only while the footer is on screen: clouds and fog drift, rain falls along its own slant */
+.art :global(.drift) { animation: drift 70s ease-in-out infinite alternate; }
+.art :global(.drift.d1) { animation-duration: 95s; animation-direction: alternate-reverse; }
+.art :global(.drift.d2) { animation-duration: 120s; }
+.art :global(.drift.f0) { animation-duration: 38s; }
+.art :global(.drift.f1) { animation-duration: 52s; animation-direction: alternate-reverse; }
+.art :global(.fall) { animation: fall 0.85s linear infinite; }
+.strip:not([data-on]) .art :global(.drift), .strip:not([data-on]) .art :global(.fall) { animation-play-state: paused; }
+@keyframes drift { from { transform: translateX(-40px); } to { transform: translateX(40px); } }
+@keyframes fall { to { transform: translate(-90px, 300px); } }
 
 .when, .where, .name { position: absolute; }
 .when, .where { right: var(--inset); display: grid; justify-items: end; text-align: right; }
-.when { top: var(--inset); }
-.where { bottom: var(--inset); }
-.name { top: var(--inset); left: var(--inset); opacity: 0; transition: opacity 0.25s; }
+.when, .where, .name { transition: color 0.4s, opacity 0.25s; }
+.when { top: var(--inset); color: var(--ink-top, #ffe072); }
+.where { bottom: var(--inset); color: var(--ink-bottom, #ffe072); }
+.name { top: var(--inset); left: var(--inset); color: var(--ink-top, #ffe072); opacity: 0; }
 .strip:hover .name, .strip:focus-within .name { opacity: 1; }
 
 .line { margin: 0; font: 400 clamp(14px, 1.6cqi, 18px) / 1.55 var(--font-serif); letter-spacing: 0.005em; }
@@ -37,4 +51,7 @@
   background: currentColor; vertical-align: middle; animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-@media (prefers-reduced-motion: reduce) { .live { animation: none; } .strip, .sceneDay, .sceneNight, .name { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .live, .art :global(.drift), .art :global(.fall) { animation: none; }
+  .when, .where, .name { transition: none; }
+}
