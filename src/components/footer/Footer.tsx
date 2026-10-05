@@ -6,7 +6,7 @@ import s from "./footer.module.css";
 /** San Francisco by day or night with the live time, then the credits. On the content's edges, on every page. */
 export function Footer() {
   // the day scene is a picture (the night one is a vector): served at the screen's size
-  const { src, srcSet, sizes, width, height } = getImageProps({ src: dayScene, alt: "", sizes: "(min-width: 1024px) calc(100vw - 308px), 100vw" }).props;
+  const { src, srcSet, sizes, width, height } = getImageProps({ src: dayScene, alt: "", sizes: "(min-width: 1244px) calc(100vw - 308px), (min-width: 1024px) 150vw, 240vw" /* cropped frames show it larger than the screen */ }).props;
   return (
     <footer aria-labelledby="footer-title" className={`${s.footer} px-5 pb-7 lg:pr-5 lg:pl-rail`}>
       <h2 id="footer-title" className="sr-only">San Francisco Bay Area</h2>

@@ -15,8 +15,9 @@ type Img = { src: string; srcSet?: string; sizes?: string; width?: number | stri
 
 /**
  * San Francisco, live: Golden Gate by day (7am–7pm there), Twin Peaks by night, with the time to the second.
- * Wide screens (960px of content and up): one scene across the full width; the time top right, the place bottom
- * right, and the scene's name top left on hover. Narrower: the two square doodles with the clock tile between them.
+ * One scene across the full width at every size: the time top right, the place bottom right, and the scene's name
+ * top left on hover. It is 1132 × 360 on wide screens and gets taller as the screen narrows (2:1, then 4:3 on phones),
+ * cropping the sides of the scene, so the clock always has room.
  * The page is built ahead of time, so the time appears once the page is running; it only ticks while on screen.
  */
 export function FooterScenes({ day }: { day: Img }) {
@@ -41,7 +42,6 @@ export function FooterScenes({ day }: { day: Img }) {
 
   return (
     <div ref={ref}>
-      {/* wide: one scene */}
       <div data-xr="Footer / Scene" className={s.strip} data-phase={phase}>
         {/* eslint-disable-next-line @next/next/no-img-element -- srcset from getImageProps (see Footer.tsx) */}
         <img {...day} alt={DAY_ALT} loading="lazy" decoding="async" className={s.sceneDay} />
@@ -56,24 +56,6 @@ export function FooterScenes({ day }: { day: Img }) {
           <span className={s.line}><span aria-hidden="true">🇺🇸</span> san francisco</span>
           <span className={s.line}>37.7749° n, 122.4194° w<i className={s.live} aria-hidden="true" /></span>
         </div>
-      </div>
-
-      {/* narrower: three tiles */}
-      <div className={s.grid}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div data-xr="Footer / Golden Gate" className={`${s.tile} ${s.art} ${s.day}`}><img src="/footer/golden-gate.svg" alt="Doodle of the Golden Gate Bridge by day, with a sailboat on the bay" loading="lazy" decoding="async" /></div>
-        <div data-xr="Footer / Clock" className={`${s.tile} ${s.clock}`} data-phase={phase}>
-          <span className={s.line}>{zone}</span>
-          {clock}
-          <span className={s.line}>
-            <span aria-hidden="true">🇺🇸</span> san francisco
-            <br />
-            37.7749° n, 122.4194° w
-            <i className={s.live} aria-hidden="true" />
-          </span>
-        </div>
-        {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div data-xr="Footer / Twin Peaks" className={`${s.tile} ${s.art} ${s.night}`}><img src="/footer/twin-peaks.svg" alt="Doodle of the city lights at night from Twin Peaks, with car light trails on the winding road" loading="lazy" decoding="async" /></div>
       </div>
     </div>
   );

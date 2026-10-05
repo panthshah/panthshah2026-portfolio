@@ -1,71 +1,40 @@
-/* The footer. 960px of content and up: one full-width scene (see .strip). Below that: Panth's two square doodles
-   with the clock tile, the clock across the top with the doodles side by side, or one column on phones. */
+/* The footer: one scene across the content width. Golden Gate by day, Twin Peaks by night (San Francisco time);
+   the time in the open sky top right, the place bottom right, the scene's name top left on hover.
+   1132 × 360 at 1440. Narrower screens get a taller frame (the scene is cropped at the sides, never squashed)
+   and the type and insets scale with the frame, so the clock always fits. */
 
 .footer { container: footer / inline-size; }
-.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--spacing-5); }
-.tile { position: relative; overflow: hidden; border-radius: var(--radius-surface); }
-.art { aspect-ratio: 1; }
-.art img { display: block; width: 100%; height: 100%; object-fit: cover; }
-
-@container footer (min-width: 560px) {
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "clock clock" "day night"; }
-  .day { grid-area: day; }
-  .night { grid-area: night; }
-  .clock { grid-area: clock; }
-}
-
-/* wide screens: one scene across the full width (1132 × 360 at 1440). Golden Gate by day, Twin Peaks by night;
-   the time in the open sky top right, the place bottom right, the scene's name top left on hover. 32px insets. */
 .strip {
-  display: none; position: relative; aspect-ratio: 1132 / 360; overflow: hidden; border-radius: var(--radius-surface);
+  container-type: inline-size;
+  --inset: clamp(16px, 2.83cqi, 32px); /* 32px on the wide frame */
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-surface);
   background: #d2f2fd; color: #0b465e; transition: color 0.6s;
 }
+@container footer (min-width: 560px) { .strip { aspect-ratio: 2 / 1; } }
+@container footer (min-width: 960px) { .strip { aspect-ratio: 1132 / 360; } }
 .strip[data-phase="night"] { background: #032660; color: #ffe072; }
+
 .sceneDay, .sceneNight { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s; }
+.sceneDay { object-position: 28% 50%; } /* cropped frames keep both towers */
+.sceneNight { object-position: 72% 50%; } /* phones: the moon and the road stay clear of the text */
+@container footer (min-width: 560px) { .sceneNight { object-position: 46% 50%; } } /* wider: the skyline and the road */
 .strip[data-phase="day"] .sceneNight, .strip[data-phase="night"] .sceneDay { opacity: 0; }
-.when, .where { position: absolute; right: var(--spacing-6); display: grid; justify-items: end; text-align: right; }
-.when { top: var(--spacing-6); }
-.where { bottom: var(--spacing-6); }
-.strip .time { font-size: 56px; }
-.name { position: absolute; top: var(--spacing-6); left: var(--spacing-6); opacity: 0; transition: opacity 0.25s; }
+
+.when, .where, .name { position: absolute; }
+.when, .where { right: var(--inset); display: grid; justify-items: end; text-align: right; }
+.when { top: var(--inset); }
+.where { bottom: var(--inset); }
+.name { top: var(--inset); left: var(--inset); opacity: 0; transition: opacity 0.25s; }
 .strip:hover .name, .strip:focus-within .name { opacity: 1; }
 
-/* the clock takes the day doodle's sky and darkest teal, or the night doodle's sky and window light */
-.clock {
-  container: clock / inline-size;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--spacing-6);
-  padding: var(--spacing-6);
-  background: #d2f2fd;
-  color: #0b465e;
-  transition: background-color 0.6s, color 0.6s;
-}
-.clock[data-phase="night"] { background: #063581; color: #ffe072; }
-.line { margin: 0; font: 400 18px/1.55 var(--font-serif); letter-spacing: 0.005em; }
-/* the time scales with its tile (56px on a desktop square), always one line */
+.line { margin: 0; font: 400 clamp(14px, 1.6cqi, 18px) / 1.55 var(--font-serif); letter-spacing: 0.005em; }
 .time {
-  font: 400 clamp(36px, 18.85cqi, 56px) / 1 var(--font-serif); /* 18.85% of the tile's inner width = 56px on a desktop square */
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums lining-nums;
-  white-space: nowrap;
+  font: 400 clamp(30px, 4.95cqi, 56px) / 1 var(--font-serif); /* 56px on the wide frame */
+  letter-spacing: -0.01em; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap;
 }
 .live {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-left: var(--spacing-2);
-  border-radius: 9999px;
-  background: currentColor;
-  vertical-align: middle;
-  animation: pulse 2s ease-in-out infinite;
+  display: inline-block; width: 6px; height: 6px; margin-left: var(--spacing-2); border-radius: 9999px;
+  background: currentColor; vertical-align: middle; animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-@media (prefers-reduced-motion: reduce) { .live { animation: none; } .clock, .strip, .sceneDay, .sceneNight, .name { transition: none; } }
-
-/* the switch between the two layouts (last, so it wins) */
-@container footer (min-width: 960px) {
-  .grid { display: none; }
-  .strip { display: block; }
-}
+@media (prefers-reduced-motion: reduce) { .live { animation: none; } .strip, .sceneDay, .sceneNight, .name { transition: none; } }

@@ -25,8 +25,6 @@ const RHYTHM: [string, string, "below" | "beside" | "inset"][] = [
   ["Card / Samsung", "Card / Founderway", "beside"],
   ["Card / Samsung", "Card / Northeastern", "below"],
   ["Card / Northeastern", "Footer / Scene", "below"],
-  ["Card / Northeastern", "Footer / Golden Gate", "below"],
-  ["Footer / Golden Gate", "Footer / Clock", "beside"],
   // About
   ["Nav / Sidebar", "Heading / About", "beside"],
   ["List / Facts", "Heading / Gallery", "below"],
