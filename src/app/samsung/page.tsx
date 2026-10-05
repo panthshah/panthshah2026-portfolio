@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import { Film } from "@/components/case/Film";
+import { NextProject } from "@/components/case/NextProject";
 import { Reading, type Section } from "@/components/case/Reading";
 import s from "@/components/case/case.module.css";
 import auditCompare from "@/assets/case/samsung/audit-compare.png";
@@ -228,6 +229,8 @@ export default function Samsung() {
           </div>
         </div>
       </section>
+
+      <NextProject href="/foundermatch" title="Better Co-founder Matching" meta="Founderway · 2024" />
     </Reading>
   );
 }
