@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { XRay } from "@/components/xray/XRay";
 import { BOOT } from "@/lib/appearance";
 import { idleBotSrc } from "@/lib/bot/idle";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
 // Bricolage Grotesque (OFL, fontsource 5.3.0) fixed at what the statement uses: weight 500, the display cut (opsz 96),
@@ -39,6 +40,9 @@ const alegreya = Alegreya({
 
 // Description is the home page statement for now; swap in a final one before launch.
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE),
+  openGraph: { siteName: "Panth Shah", type: "website", locale: "en_US" },
+  twitter: { card: "summary_large_image", creator: "@panthshah_" },
   title: {
     default: "Panth Shah",
     template: "%s · Panth Shah",

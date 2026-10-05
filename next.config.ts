@@ -6,9 +6,12 @@ const nextConfig: NextConfig = {
   turbopack: { root: path.join(__dirname) },
 
   // Old URLs from panth-2025-portfolio. Each one must keep working after the domain moves;
-  // case study routes are added here as their pages are rebuilt.
+  // /about, /playground, /samsung, /foundermatch, /northeastern and the resume file keep their old addresses.
   async redirects() {
-    return [{ source: "/home", destination: "/", permanent: true }];
+    return [
+      { source: "/home", destination: "/", permanent: true }, // the old site's home address
+      { source: "/phone", destination: "/", permanent: true }, // the old 3D phone page; the Fold8 on the home page took its place
+    ];
   },
   // three.js and the Onest files inside the Fold8 page, and the Playground films, never change (a new version gets a new name), so browsers keep them
   async headers() {
