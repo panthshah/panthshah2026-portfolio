@@ -1,23 +1,17 @@
-import { ClockTile } from "./ClockTile";
+import { FooterScenes } from "./FooterScenes";
 import s from "./footer.module.css";
 
-/** Golden Gate by day · the live Bay Area time · Twin Peaks by night, then the made-with line. On the content's edges. */
+/** San Francisco from Twin Peaks, live for the hour and the weather there, then the credits. On the content's edges, on every page. */
 export function Footer() {
   return (
     <footer aria-labelledby="footer-title" className={`${s.footer} px-5 pb-7 lg:pr-5 lg:pl-rail`}>
       <h2 id="footer-title" className="sr-only">San Francisco Bay Area</h2>
-      <div className={s.grid}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div data-xr="Footer / Golden Gate" className={`${s.tile} ${s.art} ${s.day}`}><img src="/footer/golden-gate.svg" alt="Doodle of the Golden Gate Bridge by day, with a sailboat on the bay" loading="lazy" decoding="async" /></div>
-        <ClockTile className={s.tile} />
-        {/* eslint-disable-next-line @next/next/no-img-element -- Panth's vector doodles, served as-is */}
-        <div data-xr="Footer / Twin Peaks" className={`${s.tile} ${s.art} ${s.night}`}><img src="/footer/twin-peaks.svg" alt="Doodle of the city lights at night from Twin Peaks, with car light trails on the winding road" loading="lazy" decoding="async" /></div>
-      </div>
-      <div className="mt-4 flex flex-wrap items-end justify-between gap-5 text-14 text-muted">
+      <FooterScenes />
+      <div className="mt-4 flex flex-wrap items-end justify-between gap-x-5 gap-y-1 text-14 text-muted">
         <p>
-          Made with <span aria-hidden="true">♥</span><span className="sr-only">love</span> using Claude and Figma
+          © 2026 Panth Shah · Made with <span aria-hidden="true">♥</span><span className="sr-only">love</span> using Claude and Figma
         </p>
-        <p>© 2026 Panth Shah</p>
+        <p>Illustrations made using Quiver AI in Paper</p>
       </div>
     </footer>
   );
