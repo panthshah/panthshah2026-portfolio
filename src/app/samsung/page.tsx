@@ -71,7 +71,7 @@ const DECISIONS = ["Compare where people browse", "Show key specs first", "Specs
 function Shot({ src, alt, sizes, crop, children }: { src: StaticImageData; alt: string; sizes: string; crop?: boolean; children?: React.ReactNode }) {
   return (
     <figure className={s.shot}>
-      <div className={s.frame}><Image src={src} alt={alt} sizes={sizes} className={crop ? s.crop : undefined} /></div>
+      <div className={s.mock}><div className={s.frame}><Image src={src} alt={alt} sizes={sizes} className={crop ? s.crop : undefined} /></div></div>
       {children && <figcaption>{children}</figcaption>}
     </figure>
   );
@@ -80,7 +80,7 @@ function Pair({ before, after, beforeAlt, afterAlt, ratio, marks }: { before: St
   const style = ratio ? ({ "--before": `${ratio[0]}fr`, "--after": `${ratio[1]}fr` } as React.CSSProperties) : undefined;
   return (
     <div className={s.pair} style={style}>
-      <div className={s.item}><p className={s.meta}>Before</p><div className={s.frame}><Image src={before} alt={beforeAlt} sizes={HALF} /></div></div>
+      <div className={s.item}><p className={s.meta}>Before</p><div className={s.mock}><div className={s.frame}><Image src={before} alt={beforeAlt} sizes={HALF} /></div></div></div>
       <div className={s.item}><p className={s.meta}>After</p><Marked src={after} alt={afterAlt} sizes={HALF} marks={marks} /></div>
     </div>
   );
@@ -88,9 +88,11 @@ function Pair({ before, after, beforeAlt, afterAlt, ratio, marks }: { before: St
 type Mark = [number, number, number]; // number, x%, y%
 function Marked({ src, alt, sizes, marks }: { src: StaticImageData; alt: string; sizes: string; marks: Mark[] }) {
   return (
-    <div className={s.marked}>
-      <div className={s.frame}><Image src={src} alt={alt} sizes={sizes} /></div>
-      {marks.map(([n, x, y]) => <b key={n} className={s.mark} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true">{n}</b>)}
+    <div className={s.mock}>
+      <div className={s.marked}>
+        <div className={s.frame}><Image src={src} alt={alt} sizes={sizes} /></div>
+        {marks.map(([n, x, y]) => <b key={n} className={s.mark} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true">{n}</b>)}
+      </div>
     </div>
   );
 }
@@ -111,7 +113,7 @@ export default function Samsung() {
         <p className={s.eyebrow}>Samsung Electronics · March 2026</p>
         <h1 className={s.title}>Making product comparison actually work on samsung.com</h1>
         <p className={s.lede}>Compare lets shoppers view two or three products side by side, spec by spec.</p>
-        <div className={`${s.block} ${s.frame} ${s.cover}`}><Image src={after} alt="The redesigned Compare page: three refrigerators side by side with key specifications and the differences highlighted" sizes="(min-width: 1024px) 80vw, 100vw" className={s.top} priority /></div>
+        <div className={`${s.block} ${s.mock}`}><div className={`${s.frame} ${s.cover}`}><Image src={after} alt="The redesigned Compare page: three refrigerators side by side with key specifications and the differences highlighted" sizes="(min-width: 1024px) 80vw, 100vw" className={s.top} priority /></div></div>
         <dl className={`${s.block} ${s.grid} ${s.g4} ${s.facts}`}>
           <div className={s.item}><dt>Timeline</dt><dd>March 2026</dd></div>
           <div className={s.item}><dt>My role</dt><dd>Sole designer &amp; researcher</dd></div>
@@ -211,7 +213,7 @@ export default function Samsung() {
         </div>
         <div className={`${s.shown} ${s.flow}`}>
           <div className={s.ia}>
-            <Shot src={ia} alt="Product categories connected to the key specification groups used for comparison" sizes={WIDE} />
+            <figure className={s.shot}><div className={s.frame}><Image src={ia} alt="Product categories connected to the key specification groups used for comparison" sizes={WIDE} /></div></figure>
           </div>
           <div className={s.groups} role="group" aria-label="Product categories and their key comparison specifications">
             {GROUPS.map(([category, specs]) => (
