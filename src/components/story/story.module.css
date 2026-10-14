@@ -51,15 +51,17 @@
 
 /* pictures: the same tile everywhere, same padding, same shape (16:9); click opens full size */
 .fig { display: flex; flex-direction: column; gap: var(--gap-text); container-type: inline-size; }
-.tile { background: var(--color-slot); border-radius: var(--radius-surface); padding: var(--tile-pad); aspect-ratio: 16 / 9; display: grid; place-items: center; min-width: 0; }
+/* mockup: the screen in a thin dark frame on a soft gradient of the project's colour (after Panth's Reframe sample) */
+.tile { --tint: var(--case-accent, var(--color-samsung)); background: linear-gradient(180deg, color-mix(in oklab, var(--tint) 7%, var(--color-page)), color-mix(in oklab, var(--tint) 20%, var(--color-page))); border-radius: var(--radius-surface); padding: var(--tile-pad); aspect-ratio: 16 / 9; display: grid; place-items: center; min-width: 0; }
 .tile img {
   display: block; max-width: 100%; max-height: calc(56.25cqi - 2 * var(--tile-pad)); width: auto; height: auto; cursor: zoom-in;
-  border-radius: 6px; background: #fff; box-shadow: 0 0 0 1px rgb(20 20 19 / 0.06), 0 16px 36px -22px rgb(20 20 19 / 0.35);
+  border-radius: 10px; background: #fff; border: 1.5px solid #141413; box-shadow: 0 24px 48px -28px rgb(20 20 19 / 0.45);
 }
 .tile.top img { width: 100%; height: calc(56.25cqi - 2 * var(--tile-pad)); max-height: none; object-fit: cover; object-position: top; }
 .tile.wide { aspect-ratio: auto; }
 .tile.wide img { width: 100%; max-height: none; }
-.tile.paper img { box-shadow: none; background: transparent; border-radius: 0; }
+.tile.paper { background: var(--color-slot); }
+.tile.paper img { box-shadow: none; background: transparent; border-radius: 0; border: 0; }
 .grid { display: grid; gap: var(--gap-grid); }
 @media (min-width: 720px) {
   .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }

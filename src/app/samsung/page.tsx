@@ -54,7 +54,7 @@ export default function Samsung() {
           <p>Compare shows two or three products side by side. I redesigned it so shoppers could find it and actually read it.</p>
           <p className={s.small}>Sole designer and researcher, with product, engineering, business and CX.</p>
         </div>
-        <Shot src={after} alt="The new Compare page: three refrigerators side by side, each with a best-for tag and price, then key specs" look={["top"]} priority />
+        <Shot src={after} alt="The new Compare page: three refrigerators side by side, each with a best-for tag and price, then key specs" look={["wide"]} priority />
       </header>
 
       <section id="problem">
