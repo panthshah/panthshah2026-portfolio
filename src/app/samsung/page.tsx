@@ -27,12 +27,12 @@ export const metadata: Metadata = {
 const SECTIONS: Section[] = [
   { id: "overview", label: "Overview" },
   { id: "problem", label: "The problem" },
-  { id: "impact", label: "Impact" },
   { id: "research", label: "How I found it" },
   { id: "competitive", label: "Competitive research" },
   { id: "architecture", label: "Information architecture" },
   { id: "direction", label: "Direction" },
   { id: "solution", label: "The solution" },
+  { id: "impact", label: "Impact" },
 ];
 
 // the right column is at most 784 wide; pairs are half of that, thirds a third
@@ -76,12 +76,21 @@ function Shot({ src, alt, sizes, crop, children }: { src: StaticImageData; alt: 
     </figure>
   );
 }
-function Pair({ before, after, beforeAlt, afterAlt, ratio }: { before: StaticImageData; after: StaticImageData; beforeAlt: string; afterAlt: string; ratio?: [number, number] }) {
+function Pair({ before, after, beforeAlt, afterAlt, ratio, marks }: { before: StaticImageData; after: StaticImageData; beforeAlt: string; afterAlt: string; ratio?: [number, number]; marks: Mark[] }) {
   const style = ratio ? ({ "--before": `${ratio[0]}fr`, "--after": `${ratio[1]}fr` } as React.CSSProperties) : undefined;
   return (
     <div className={s.pair} style={style}>
       <div className={s.item}><p className={s.meta}>Before</p><div className={s.frame}><Image src={before} alt={beforeAlt} sizes={HALF} /></div></div>
-      <div className={s.item}><p className={s.meta}>After</p><div className={s.frame}><Image src={after} alt={afterAlt} sizes={HALF} /></div></div>
+      <div className={s.item}><p className={s.meta}>After</p><Marked src={after} alt={afterAlt} sizes={HALF} marks={marks} /></div>
+    </div>
+  );
+}
+type Mark = [number, number, number]; // number, x%, y%
+function Marked({ src, alt, sizes, marks }: { src: StaticImageData; alt: string; sizes: string; marks: Mark[] }) {
+  return (
+    <div className={s.marked}>
+      <div className={s.frame}><Image src={src} alt={alt} sizes={sizes} /></div>
+      {marks.map(([n, x, y]) => <b key={n} className={s.mark} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true">{n}</b>)}
     </div>
   );
 }
@@ -114,11 +123,10 @@ export default function Samsung() {
       <section className={`${s.sec} ${s.cont}`}>
         <div className={`${s.told} ${s.flow}`}>
           <p className={s.name}>Feature overview</p>
-          <h2>Making product comparison more useful on Samsung.com</h2>
-          <p>Compare lets shoppers view two or three products side by side, spec by spec.</p>
+          <p>Current Compare experience on the product finder page.</p>
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <Shot src={current} alt="The Compare models popup over the refrigerator product finder on samsung.com" sizes={WIDE}>Current Compare experience on the product finder page.</Shot>
+          <Shot src={current} alt="The Compare models popup over the refrigerator product finder on samsung.com" sizes={WIDE} />
           <div className={`${s.block} ${s.grid} ${s.g2}`}>
             <div className={s.item}><p className={s.num}>2M+</p><p className={s.small}>monthly visitors to Samsung.com</p></div>
             <div className={s.item}><p className={s.num}>~285</p><p className={s.small}>monthly Compare users</p></div>
@@ -133,30 +141,12 @@ export default function Samsung() {
         </div>
       </section>
 
-      <section id="impact" className={s.sec}>
-        <div className={`${s.told} ${s.flow}`}>
-          <p className={s.name}>Impact</p>
-          <h2>Monthly unique visitors to Compare grew from about 285 to over 7,300 after launch.</h2>
-          <p className={s.source}>Source: Quantum Metric. Before: Jan–May 2026 monthly average. After: last 30 days (June).</p>
-        </div>
-        <div className={`${s.shown} ${s.flow}`}>
-          <div className={`${s.grid} ${s.g3}`}>
-            <div className={s.item}><p className={s.num}>7,300+</p><h3>Unique visitors in 30 days</h3><p className={s.small}>Up from ~285 a month, Jan–Aug 2026 average</p></div>
-            <div className={s.item}><p className={s.num}>$31,150</p><h3>Revenue in 30 days</h3><p className={s.small}>Up 2,496%, $973 average order value</p></div>
-            <div className={s.item}><p className={s.num}>6%</p><h3>of Compare sessions included an on-site search</h3><p className={s.small}>Down from 21%</p></div>
-          </div>
-        </div>
-      </section>
-
       <section id="research" className={s.sec}>
         <div className={`${s.told} ${s.flow}`}>
           <p className={s.name}>How I found it</p>
           <h2>NPS insights and data analytics</h2>
           <p>I started with the NPS team to hear how shoppers described Compare, then worked with Data Analytics to test those themes against real sessions.</p>
-          <div className={`${s.part} ${s.flow}`}>
-            <h3>Then, with Data Analytics, I checked three things in the session data:</h3>
-          </div>
-          <Notes items={[["Can shoppers find it from where they browse?"], ["Once inside, how far do they get?"], ["Does the page load and work reliably?"]]} />
+          <p>Then, with Data Analytics, I checked three things in the session data.</p>
         </div>
         <div className={`${s.shown} ${s.flow}`}>
           <div className={s.voices}>
@@ -165,9 +155,9 @@ export default function Samsung() {
             ))}
           </div>
           <div className={`${s.block} ${s.grid} ${s.g3}`}>
-            <div className={s.item}><p className={s.num}>21%</p><p className={s.small}>of Compare sessions included an on-site search</p></div>
-            <div className={s.item}><p className={s.num}>10%</p><p className={s.small}>average scroll depth in the Compare modal</p></div>
-            <div className={s.item}><p className={s.num}>79%</p><p className={s.small}>of Compare page views logged a technical error</p></div>
+            <div className={s.item}><h3>Can shoppers find it from where they browse?</h3><p className={s.num}>21%</p><p className={s.small}>of Compare sessions included an on-site search</p></div>
+            <div className={s.item}><h3>Once inside, how far do they get?</h3><p className={s.num}>10%</p><p className={s.small}>average scroll depth in the Compare modal</p></div>
+            <div className={s.item}><h3>Does the page load and work reliably?</h3><p className={s.num}>79%</p><p className={s.small}>of Compare page views logged a technical error</p></div>
           </div>
         </div>
       </section>
@@ -265,7 +255,7 @@ export default function Samsung() {
           <Notes items={[["A Compare link per category", "Each product line's menu has its own link, like Compare TVs or Compare Refrigerators. Shoppers start comparing within the category they're already browsing."]]} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <Shot src={menu} alt="The samsung.com main menu open on TV and AV, with a Compare TVs link in the shop-by-size column" sizes={WIDE} />
+          <Marked src={menu} alt="The samsung.com main menu open on TV and AV, with a Compare TVs link in the shop-by-size column" sizes={WIDE} marks={[[1, 42.3, 70.8]]} />
         </div>
       </section>
 
@@ -277,7 +267,7 @@ export default function Samsung() {
           <Notes items={[["Sits next to Galaxy S, Galaxy Z and Galaxy A, so it’s visible before anyone scrolls.", "The checkbox on each card was already there; this gives it a front door."]]} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <Shot src={finder} alt="The smartphone product finder with Compare as a tab in the category navigation, next to Galaxy A" sizes={WIDE} />
+          <Marked src={finder} alt="The smartphone product finder with Compare as a tab in the category navigation, next to Galaxy A" sizes={WIDE} marks={[[1, 55.7, 9.8]]} />
         </div>
       </section>
 
@@ -289,7 +279,7 @@ export default function Samsung() {
           <Notes items={[["Swap products in place", "Dropdown above each column"], ["Show what each product is best for", "Tag and summary before any spec"], ["Price and savings up front"]]} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <Pair before={s02b} after={s02a} beforeAlt="The old Compare models popup: product names, ratings and photos" afterAlt="The new Compare: a dropdown above each product, a best-for tag, a one-line summary, price and savings" />
+          <Pair before={s02b} after={s02a} beforeAlt="The old Compare models popup: product names, ratings and photos" afterAlt="The new Compare: a dropdown above each product, a best-for tag, a one-line summary, price and savings" marks={[[1, 98, 13.2], [2, 73.9, 49.5], [3, 72.3, 60.2]]} />
         </div>
       </section>
 
@@ -301,7 +291,7 @@ export default function Samsung() {
           <Notes items={[["Filter to key differences", "One toggle, always in reach"], ["Group specs into six categories", "Key specs open first"], ["Use plain-language labels", "“Full depth,” “With handles”"]]} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <Pair before={s03b} after={s03a} beforeAlt="The old spec table: one flat list with N/A values" afterAlt="The new spec table: a Key Differences toggle, six category tabs and plain-language labels" ratio={[480, 760]} />
+          <Pair before={s03b} after={s03a} beforeAlt="The old spec table: one flat list with N/A values" afterAlt="The new spec table: a Key Differences toggle, six category tabs and plain-language labels" ratio={[480, 760]} marks={[[1, 79.7, 6], [2, 19.7, 11.7], [3, 13.2, 27.9]]} />
         </div>
       </section>
 
@@ -313,7 +303,22 @@ export default function Samsung() {
           <Notes items={[["Highlight differences", "Apply Key Differences"], ["Label standout specs", "“Only one with a screen,” “Most efficient”"], ["De-emphasize matching specs"]]} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <Pair before={s04b} after={s04a} beforeAlt="The old show-me-only-the-differences view: every row highlighted the same way" afterAlt="The new view with Apply Key Differences on: matching rows fade back, standout specs get labels" ratio={[360, 896]} />
+          <Pair before={s04b} after={s04a} beforeAlt="The old show-me-only-the-differences view: every row highlighted the same way" afterAlt="The new view with Apply Key Differences on: matching rows fade back, standout specs get labels" ratio={[360, 896]} marks={[[1, 79.7, 3.5], [2, 17.8, 68.8], [3, 68.8, 80.2]]} />
+        </div>
+      </section>
+
+      <section id="impact" className={s.sec}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.name}>Impact</p>
+          <h2>Monthly unique visitors to Compare grew from about 285 to over 7,300 after launch.</h2>
+          <p className={s.source}>Source: Quantum Metric. Before: Jan–May 2026 monthly average. After: last 30 days (June).</p>
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <div className={`${s.grid} ${s.g3}`}>
+            <div className={s.item}><p className={s.num}>7,300+</p><h3>Unique visitors in 30 days</h3><p className={s.small}>Up from ~285 a month, Jan–Aug 2026 average</p></div>
+            <div className={s.item}><p className={s.num}>$31,150</p><h3>Revenue in 30 days</h3><p className={s.small}>Up 2,496%, $973 average order value</p></div>
+            <div className={s.item}><p className={s.num}>6%</p><h3>of Compare sessions included an on-site search</h3><p className={s.small}>Down from 21%</p></div>
+          </div>
         </div>
       </section>
 
