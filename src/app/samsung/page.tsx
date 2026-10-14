@@ -4,7 +4,6 @@ import { NextProject } from "@/components/case/NextProject";
 import { Reading, type Section } from "@/components/case/Reading";
 import s from "@/components/case/case.module.css";
 import after from "@/assets/case/samsung/after.png";
-import afterDefault from "@/assets/case/samsung/after-default.png";
 import current from "@/assets/case/samsung/current-compare.png";
 import audit1 from "@/assets/case/samsung/audit-1.png";
 import audit2 from "@/assets/case/samsung/audit-2.png";
@@ -146,7 +145,6 @@ export default function Samsung() {
             <div className={s.item}><p className={s.num}>$31,150</p><h3>Revenue in 30 days</h3><p className={s.small}>Up 2,496%, $973 average order value</p></div>
             <div className={s.item}><p className={s.num}>6%</p><h3>of Compare sessions included an on-site search</h3><p className={s.small}>Down from 21%</p></div>
           </div>
-          <Shot src={afterDefault} alt="The redesigned Compare page as it opens: three products, their best-for tags and prices, then key specifications in tabs" sizes={WIDE} crop />
         </div>
       </section>
 
