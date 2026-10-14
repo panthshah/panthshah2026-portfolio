@@ -1,32 +1,43 @@
 import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
-import { Film } from "@/components/case/Film";
 import { NextProject } from "@/components/case/NextProject";
 import { Reading, type Section } from "@/components/case/Reading";
 import s from "@/components/case/case.module.css";
-import auditCompare from "@/assets/case/samsung/audit-compare.png";
-import auditSpecs from "@/assets/case/samsung/audit-specs.png";
+import after from "@/assets/case/samsung/after.png";
+import afterDefault from "@/assets/case/samsung/after-default.png";
+import current from "@/assets/case/samsung/current-compare.png";
+import audit1 from "@/assets/case/samsung/audit-1.png";
+import audit2 from "@/assets/case/samsung/audit-2.png";
+import audit3 from "@/assets/case/samsung/audit-3.png";
 import ia from "@/assets/case/samsung/ia.png";
+import menu from "@/assets/case/samsung/menu.png";
+import finder from "@/assets/case/samsung/product-finder.png";
+import s02b from "@/assets/case/samsung/s02-before.png";
+import s02a from "@/assets/case/samsung/s02-after.png";
+import s03b from "@/assets/case/samsung/s03-before.png";
+import s03a from "@/assets/case/samsung/s03-after.png";
+import s04b from "@/assets/case/samsung/s04-before.png";
+import s04a from "@/assets/case/samsung/s04-after.png";
 
-// Copy is from the old site's Samsung page, word for word. Layout follows the case study system (see case.module.css).
+// Copy is from Panth's portfolio deck (Oct 2026), word for word. Layout follows the case study system (see case.module.css).
 export const metadata: Metadata = {
   title: "Samsung",
-  description: "Samsung.com's Product Finder helps U.S. shoppers filter and compare products. I led a research-driven redesign of the comparison experience.",
+  description: "Making product comparison actually work on samsung.com. Compare lets shoppers view two or three products side by side, spec by spec.",
 };
 
 const SECTIONS: Section[] = [
   { id: "overview", label: "Overview" },
   { id: "problem", label: "The problem" },
-  { id: "research", label: "How we found it" },
+  { id: "impact", label: "Impact" },
+  { id: "research", label: "How I found it" },
   { id: "competitive", label: "Competitive research" },
-  { id: "direction", label: "Direction" },
   { id: "architecture", label: "Information architecture" },
-  { id: "iterations", label: "Iterations" },
-  { id: "final-direction", label: "Final direction" },
+  { id: "direction", label: "Direction" },
+  { id: "solution", label: "The solution" },
 ];
 
-// the right column is at most 784 wide; pairs are half of that
-const WIDE = "(min-width: 1024px) 56vw, 100vw", HALF = "(min-width: 1024px) 28vw, (min-width: 700px) 50vw, 100vw";
+// the right column is at most 784 wide; pairs are half of that, thirds a third
+const WIDE = "(min-width: 1024px) 56vw, 100vw", HALF = "(min-width: 1024px) 28vw, (min-width: 700px) 50vw, 100vw", THIRD = "(min-width: 1024px) 19vw, (min-width: 700px) 33vw, 100vw";
 
 const Yes = () => (
   <svg className={s.yes} viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Meets criterion"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z" /></svg>
@@ -36,12 +47,12 @@ const No = () => (
 );
 // criteria × Home Depot, Best Buy, Lowe's, Samsung
 const CRITERIA: [string, string][] = [
-  ["Categorization of specifications", "1110"],
-  ["Five key specifications at a glance", "1100"],
-  ["Key differences highlighted", "1100"],
-  ["Visual layout and alignment", "1100"],
-  ["Scannability", "1000"],
-  ["Responsive layout", "0100"],
+  ["Groups specs under category headings", "1110"],
+  ["Shows key specs on the first screen, without scrolling", "1100"],
+  ["Visually marks the rows where products differ", "1100"],
+  ["Lines up each spec's values in a single row", "1100"],
+  ["Keeps product names in view while scrolling", "1000"],
+  ["Works at phone width without sideways scrolling", "0100"],
 ];
 const GROUPS: [string, string[]][] = [
   ["Refrigerator", ["Dimensions", "Storage", "Water & Ice", "Design", "Cooling"]],
@@ -53,16 +64,35 @@ const GROUPS: [string, string[]][] = [
 ];
 const VOICES = [
   "“Challenging to try and look between several products to compare.”",
-  "“Confusing site, hard to compare items.”",
   "“Specs are hard to access and compatibility information is not clear.”",
 ];
+const GOALS = ["Make Compare easy to find", "Show the key specs first", "Group specs into clear categories", "Highlight what’s different"];
+const DECISIONS = ["Compare where people browse", "Show key specs first", "Specs grouped the way people choose", "What’s different, at a glance"];
 
-function Shot({ src, alt, sizes, crop, children }: { src: StaticImageData; alt: string; sizes: string; crop?: boolean; children: React.ReactNode }) {
+function Shot({ src, alt, sizes, crop, children }: { src: StaticImageData; alt: string; sizes: string; crop?: boolean; children?: React.ReactNode }) {
   return (
     <figure className={s.shot}>
       <div className={s.frame}><Image src={src} alt={alt} sizes={sizes} className={crop ? s.crop : undefined} /></div>
-      <figcaption>{children}</figcaption>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
+  );
+}
+function Pair({ before, after, beforeAlt, afterAlt, ratio }: { before: StaticImageData; after: StaticImageData; beforeAlt: string; afterAlt: string; ratio?: [number, number] }) {
+  const style = ratio ? ({ "--before": `${ratio[0]}fr`, "--after": `${ratio[1]}fr` } as React.CSSProperties) : undefined;
+  return (
+    <div className={s.pair} style={style}>
+      <div className={s.item}><p className={s.meta}>Before</p><div className={s.frame}><Image src={before} alt={beforeAlt} sizes={HALF} /></div></div>
+      <div className={s.item}><p className={s.meta}>After</p><div className={s.frame}><Image src={after} alt={afterAlt} sizes={HALF} /></div></div>
+    </div>
+  );
+}
+function Notes({ items }: { items: [string, string?][] }) {
+  return (
+    <div className={s.finds}>
+      {items.map(([title, line], i) => (
+        <p key={title} className={`${s.find} ${line ? s.long : ""}`}><b aria-hidden="true">{i + 1}</b><span>{title}{line && <em>{line}</em>}</span></p>
+      ))}
+    </div>
   );
 }
 
@@ -70,82 +100,107 @@ export default function Samsung() {
   return (
     <Reading sections={SECTIONS}>
       <section id="overview" className={`${s.sec} ${s.first} ${s.flow}`}>
-        <p className={s.eyebrow}>Samsung Electronics · May 2025 – Present</p>
-        <h1 className={s.title}>Making Product Comparison Actually Work on Samsung.com</h1>
-        <p className={s.lede}>Samsung.com&apos;s Product Finder helps U.S. shoppers filter and compare products. I led a research-driven redesign of the comparison experience in partnership with product, data, and engineering.</p>
-        <div className={`${s.block} ${s.frame}`}><Film src="/case/samsung/hero.mp4" label="Samsung Product Finder comparison experience" width={2560} height={1440} eager /></div>
+        <p className={s.eyebrow}>Samsung Electronics · March 2026</p>
+        <h1 className={s.title}>Making product comparison actually work on samsung.com</h1>
+        <p className={s.lede}>Compare lets shoppers view two or three products side by side, spec by spec.</p>
+        <div className={`${s.block} ${s.frame} ${s.cover}`}><Image src={after} alt="The redesigned Compare page: three refrigerators side by side with key specifications and the differences highlighted" sizes="(min-width: 1024px) 80vw, 100vw" className={s.top} priority /></div>
         <dl className={`${s.block} ${s.grid} ${s.g4} ${s.facts}`}>
-          <div className={s.item}><dt>Timeline</dt><dd>May 2025 – Present</dd></div>
-          <div className={s.item}><dt>My role</dt><dd>UX Design</dd><dd>Research &amp; Strategy</dd><dd>Cross-functional Collaboration</dd></div>
-          <div className={s.item}><dt>Team</dt><dd>Design, Product, Data, Engineering &amp; Business</dd></div>
+          <div className={s.item}><dt>Timeline</dt><dd>March 2026</dd></div>
+          <div className={s.item}><dt>My role</dt><dd>Sole designer &amp; researcher</dd></div>
+          <div className={s.item}><dt>Collaborators</dt><dd>Product managers · Engineers · Business &amp; CX</dd></div>
           <div className={s.item}><dt>Tools</dt><dd>Figma &amp; Sketch</dd><dd>UserTesting.com</dd><dd>Confluence &amp; Jira</dd></div>
         </dl>
       </section>
 
-      <section id="problem" className={s.sec}>
-        <div className={`${s.told} ${s.flow}`}><p className={s.name}>The problem</p></div>
+      <section className={`${s.sec} ${s.cont}`}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.name}>Feature overview</p>
+          <h2>Making product comparison more useful on Samsung.com</h2>
+          <p>Compare lets shoppers view two or three products side by side, spec by spec.</p>
+        </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <p className={s.say}>Shoppers struggled to compare products confidently. The experience was visually dense, specification data was often incomplete, and users rarely reached the information needed to distinguish one product from another.</p>
+          <Shot src={current} alt="The Compare models popup over the refrigerator product finder on samsung.com" sizes={WIDE}>Current Compare experience on the product finder page.</Shot>
+          <div className={`${s.block} ${s.grid} ${s.g2}`}>
+            <div className={s.item}><p className={s.num}>2M+</p><p className={s.small}>monthly visitors to Samsung.com</p></div>
+            <div className={s.item}><p className={s.num}>~285</p><p className={s.small}>monthly Compare users</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="problem" className={s.sec}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.name}>The problem</p>
+          <h2>Compare was hard to find, difficult to scan, and missing key information.</h2>
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <div className={`${s.grid} ${s.g3}`}>
+            <div className={s.item}><p className={s.num}>21%</p><p className={s.small}>of Compare sessions included an on-site search</p></div>
+            <div className={s.item}><p className={s.num}>10%</p><p className={s.small}>average scroll depth in the Compare modal</p></div>
+            <div className={s.item}><p className={s.num}>79%</p><p className={s.small}>of Compare page views logged a technical error</p></div>
+          </div>
+          <div className={`${s.block} ${s.grid} ${s.g3}`}>
+            <div className={s.item}><h3>Hard to find</h3><p className={s.small}>No Compare entry point on phone listing or product pages, and each category ran its own version.</p></div>
+            <div className={s.item}><h3>Too dense to scan</h3><p className={s.small}>One long, flat table with no grouping and no highlighted differences.</p></div>
+            <div className={s.item}><h3>Gaps and errors</h3><p className={s.small}>Some specs had missing values or unclear details.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="impact" className={s.sec}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.name}>Impact</p>
+          <h2>Monthly unique visitors to Compare grew from about 285 to over 7,300 after launch.</h2>
+          <p className={s.source}>Source: Quantum Metric. Before: Jan–May 2026 monthly average. After: last 30 days (June).</p>
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <div className={`${s.grid} ${s.g3}`}>
+            <div className={s.item}><p className={s.num}>7,300+</p><h3>Unique visitors in 30 days</h3><p className={s.small}>Up from ~285 a month, Jan–Aug 2026 average</p></div>
+            <div className={s.item}><p className={s.num}>$31,150</p><h3>Revenue in 30 days</h3><p className={s.small}>Up 2,496%, $973 average order value</p></div>
+            <div className={s.item}><p className={s.num}>6%</p><h3>of Compare sessions included an on-site search</h3><p className={s.small}>Down from 21%</p></div>
+          </div>
+          <Shot src={afterDefault} alt="The redesigned Compare page as it opens: three products, their best-for tags and prices, then key specifications in tabs" sizes={WIDE} crop />
         </div>
       </section>
 
       <section id="research" className={s.sec}>
         <div className={`${s.told} ${s.flow}`}>
-          <p className={s.name}>How we found the problem</p>
-          <h2>Two evidence sources revealed the same pattern</h2>
-          <p>Customer feedback and a structured UX audit both pointed to an experience that was difficult to scan, navigate, and trust.</p>
+          <p className={s.name}>How I found it</p>
+          <h2>NPS insights and data analytics</h2>
+          <p>I started with the NPS team to hear how shoppers described Compare, then worked with Data Analytics to test those themes against real sessions.</p>
           <div className={`${s.part} ${s.flow}`}>
-            <h3>01 — Net Promoter Score (NPS) feedback</h3>
-            <p>NPS comments repeatedly described the comparison experience as confusing, difficult to scan, and incomplete.</p>
+            <h3>Then, with Data Analytics, I checked three things in the session data:</h3>
           </div>
+          <Notes items={[["Can shoppers find it from where they browse?"], ["Once inside, how far do they get?"], ["Does the page load and work reliably?"]]} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
           <div className={s.voices}>
             {VOICES.map((v) => (
-              <figure key={v} className={s.voice}><blockquote>{v}</blockquote><figcaption>Samsung.com customer · NPS response</figcaption></figure>
+              <figure key={v} className={s.voice}><blockquote>{v}</blockquote><figcaption>NPS comment</figcaption></figure>
             ))}
-          </div>
-          <div className={`${s.block} ${s.grid} ${s.g2}`}>
-            <div className={`${s.item} ${s.stat}`}>
-              <div className={s.pic} aria-hidden="true"><span className={s.depth}><i /></span></div>
-              <p className={s.num}>10%</p>
-              <p className={s.small}>Average scroll depth in the comparison modal, suggesting that few users reached deeper specifications.</p>
-            </div>
-            <div className={`${s.item} ${s.stat}`}>
-              <div className={s.pic} aria-hidden="true"><span className={s.dots}>{Array.from({ length: 100 }, (_, i) => <i key={i} />)}</span></div>
-              <p className={s.num}>~100</p>
-              <p className={s.small}>Users included in the analysis of comparison behavior on Samsung.com.</p>
-            </div>
           </div>
         </div>
       </section>
 
       <section className={`${s.sec} ${s.cont}`}>
         <div className={`${s.told} ${s.flow}`}>
-          <h3>02 — UX audit</h3>
-          <p>A structured audit revealed usability issues consistent with the frustrations described in NPS feedback.</p>
+          <p className={s.name}>UX audit</p>
+          <h2>What I found in the Compare audit</h2>
+          <p>I audited the live Compare modal for its layout, missing specifications, and how differences were presented.</p>
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <div className={`${s.grid} ${s.g2}`}>
-            <Shot src={auditCompare} alt="Compare models popup showing product headers and images" sizes={HALF}>The comparison modal <strong>extended beyond the viewport</strong>, hiding key content.</Shot>
-            <Shot src={auditSpecs} alt="Spec comparison table with N/A values and long lists" sizes={HALF} crop>Frequent <strong>N/A values</strong> reduced confidence in the comparison data.</Shot>
+          <div className={`${s.grid} ${s.g3}`}>
+            <Shot src={audit1} alt="Compare models popup: headers and two product photos fill the first screen" sizes={THIRD}>Headers and product photos filled the first screen, pushing specifications below the fold.</Shot>
+            <Shot src={audit2} alt="Spec rows with N/A values" sizes={THIRD}>Missing specification values left gaps in the comparison.</Shot>
+            <Shot src={audit3} alt="Every spec row highlighted the same way, with a note: every row highlighted, nothing stands out" sizes={THIRD}>Identical styling across values made product differences harder to scan.</Shot>
           </div>
-          <figure className={`${s.block} ${s.shot}`}>
-            <div className={s.frame}><Film src="/case/samsung/audit.mp4" label="Recorded audit of Samsung's product comparison experience" /></div>
-            <figcaption>Specifications lacked <strong>clear grouping, prioritization, and difference highlighting</strong>, forcing users to scan the full table.</figcaption>
-          </figure>
         </div>
       </section>
 
       <section id="competitive" className={s.sec}>
         <div className={`${s.told} ${s.flow}`}>
           <p className={s.name}>Competitive research</p>
-          <h2>Competitor patterns revealed a clear opportunity for Samsung</h2>
-          <p>I evaluated Samsung, Home Depot, Best Buy, and Lowe&apos;s against six criteria tied to comparison clarity, scannability, and purchase confidence.</p>
-          <div className={`${s.part} ${s.flow}`}>
-            <h3>Key takeaway</h3>
-            <p>Home Depot and Best Buy met five of the six criteria, while Samsung met none in the audited experience. The gap was structural, not cosmetic, showing a need to rethink how specifications were organized, prioritized, and compared.</p>
-          </div>
+          <h2>Where Samsung’s Compare fell short.</h2>
+          <p>I defined six criteria from the audit and NPS findings. A retailer met one only if its default Compare view did exactly what&apos;s listed.</p>
         </div>
         <div className={`${s.shown} ${s.flow}`}>
           <table className={s.scores}>
@@ -159,37 +214,23 @@ export default function Samsung() {
             <tfoot><tr><td>Score</td><td>5 / 6</td><td>5 / 6</td><td>2 / 6</td><td className={s.us}>0 / 6</td></tr></tfoot>
           </table>
           <div className={s.tally} aria-label="Competitive research scores">
-            <div><b>Home Depot</b><span>5 / 6</span><p>Strong overall; responsive layout was the only criterion not met.</p></div>
-            <div><b>Best Buy</b><span>5 / 6</span><p>Strong overall; scannability was the only criterion not met.</p></div>
-            <div><b>Lowe&apos;s</b><span>2 / 6</span><p>Met categorization and key-specification criteria, but missed the remaining four.</p></div>
-            <div><b>Samsung</b><span>0 / 6</span><p>The audited experience did not meet any of the six comparison criteria.</p></div>
+            <div><b>Home Depot</b><span>5 / 6</span></div>
+            <div><b>Best Buy</b><span>5 / 6</span></div>
+            <div><b>Lowe&apos;s</b><span>2 / 6</span></div>
+            <div><b>Samsung</b><span>0 / 6</span></div>
           </div>
-        </div>
-      </section>
-
-      <section id="direction" className={s.sec}>
-        <div className={`${s.told} ${s.flow}`}>
-          <p className={s.name}>Defining the direction</p>
-          <h2>One question focused the redesign</h2>
-          <p>The research pointed to an information problem, not simply a visual one. I used a single how-might-we question to align the team around the decision shoppers needed to make.</p>
-          <p>That question translated the research into four design goals: improve scannability, surface key specifications, highlight meaningful differences, and organize specifications into clear categories.</p>
-        </div>
-        <div className={`${s.shown} ${s.flow}`}>
-          <p className={s.eyebrow}>How might we</p>
-          <p className={s.say}>How might we help shoppers compare the specifications that matter most without forcing them to scan an overwhelming table?</p>
         </div>
       </section>
 
       <section id="architecture" className={s.sec}>
         <div className={`${s.told} ${s.flow}`}>
           <p className={s.name}>Information architecture</p>
-          <h2>Organizing specifications around how people choose</h2>
-          <p>I reviewed RTINGS.com, Best Buy, Reddit, Consumer Reports, and buyer guides to understand which details shoppers prioritize across appliances and electronics. Those signals helped identify the decision-critical specifications for each product category.</p>
-          <p>For refrigerators, that included dimensions, storage, water and ice, design, and cooling. I then mapped category-specific groups across product lines so shoppers could move directly to what mattered without every product being forced into the same hierarchy.</p>
+          <h2>Specs organized around how people choose</h2>
+          <p>I used RTINGS reviews and buyer guides to identify important specs, then grouped and prioritized them for each product category.</p>
         </div>
         <div className={`${s.shown} ${s.flow}`}>
           <div className={s.ia}>
-            <Shot src={ia} alt="Product categories connected to the key specification groups used for comparison" sizes={WIDE}>A scalable structure connects each category to the specifications shoppers use to decide.</Shot>
+            <Shot src={ia} alt="Product categories connected to the key specification groups used for comparison" sizes={WIDE} />
           </div>
           <div className={s.groups} role="group" aria-label="Product categories and their key comparison specifications">
             {GROUPS.map(([category, specs]) => (
@@ -199,34 +240,89 @@ export default function Samsung() {
         </div>
       </section>
 
-      <section id="iterations" className={s.sec}>
+      <section id="direction" className={s.sec}>
         <div className={`${s.told} ${s.flow}`}>
-          <p className={s.name}>Design iterations</p>
-          <h2>Each round removed a different source of friction</h2>
-          <p>I worked with design and product partners to test feasibility and refine the model across several iterations. Rather than showing every screen, these two stages capture the decisions that materially changed the direction.</p>
+          <p className={s.name}>Defining the direction</p>
+          <p className={s.say}>How might we help shoppers find Compare and quickly see the differences that matter, so they can choose the right product with confidence?</p>
         </div>
         <div className={`${s.shown} ${s.flow}`}>
           <div className={`${s.grid} ${s.g2}`}>
-            <div className={s.item}><p className={s.meta}>Early direction</p><h3>Structure improved, but scrolling remained</h3><p className={s.small}>The first concept introduced key specifications and main and subcategories. It created hierarchy, but shoppers still had to move through a long comparison page.</p></div>
-            <div className={s.item}><p className={s.meta}>Second direction</p><h3>Faster scanning added more interaction</h3><p className={s.small}>A category-jump menu shortened the path to deeper specifications, but it introduced extra clicks and relied on shoppers knowing where to go.</p></div>
+            {GOALS.map((g, i) => (
+              <div key={g} className={s.item}><p className={s.meta}>Goal 0{i + 1}</p><h3>{g}</h3></div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="final-direction" className={s.sec}>
+      <section id="solution" className={s.sec}>
         <div className={`${s.told} ${s.flow}`}>
-          <p className={s.name}>Final direction</p>
-          <h2>A comparison experience built around decisions, not data volume</h2>
-          <p>The final direction combined the strongest ideas from earlier rounds and addressed the four needs identified at the start of the project.</p>
-          <p>After four to five rounds of feedback with design and product partners, the final concept was aligned and shared with the mobile team for implementation review.</p>
+          <p className={s.name}>The solution</p>
+          <h2>One page to find, scan and choose</h2>
+          <p>Four design decisions address the problems we found in research.</p>
+          <Notes items={DECISIONS.map((d) => [d])} />
         </div>
         <div className={`${s.shown} ${s.flow}`}>
-          <div className={`${s.grid} ${s.g2}`}>
-            <div className={s.item}><p className={s.meta}>01</p><h3>Explain product fit</h3><p className={s.small}>Help shoppers understand why a product may suit their needs before they enter the specification table.</p></div>
-            <div className={s.item}><p className={s.meta}>02</p><h3>Create a clear hierarchy</h3><p className={s.small}>Use main and subcategories so shoppers can move directly to the information they care about.</p></div>
-            <div className={s.item}><p className={s.meta}>03</p><h3>Prioritize key specifications</h3><p className={s.small}>Surface decision-critical details early instead of treating every specification with equal importance.</p></div>
-            <div className={s.item}><p className={s.meta}>04</p><h3>Make differences scannable</h3><p className={s.small}>Help shoppers identify meaningful distinctions without reading the full table row by row.</p></div>
-          </div>
+          <Shot src={after} alt="The redesigned Compare page with Apply Key Differences on: matching specs fade back and standout specs carry labels" sizes={WIDE} crop />
+        </div>
+      </section>
+
+      <section className={`${s.sec} ${s.cont}`}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.eyebrow}>Solution 01</p>
+          <h2>01. Find Compare in the main menu</h2>
+          <p>Shoppers can jump straight into Compare from the main menu, before they even reach a product page.</p>
+          <Notes items={[["A Compare link per category", "Each product line's menu has its own link, like Compare TVs or Compare Refrigerators. Shoppers start comparing within the category they're already browsing."]]} />
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <Shot src={menu} alt="The samsung.com main menu open on TV and AV, with a Compare TVs link in the shop-by-size column" sizes={WIDE} />
+        </div>
+      </section>
+
+      <section className={`${s.sec} ${s.cont}`}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.eyebrow}>Solution 01</p>
+          <h2>01. Compare, built into the product finder</h2>
+          <p>Compare sits in the category navigation, alongside Galaxy S, Galaxy Z and Galaxy A.</p>
+          <Notes items={[["Sits next to Galaxy S, Galaxy Z and Galaxy A, so it’s visible before anyone scrolls.", "The checkbox on each card was already there; this gives it a front door."]]} />
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <Shot src={finder} alt="The smartphone product finder with Compare as a tab in the category navigation, next to Galaxy A" sizes={WIDE} />
+        </div>
+      </section>
+
+      <section className={`${s.sec} ${s.cont}`}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.eyebrow}>Solution 02</p>
+          <h2>02. Show key specs first</h2>
+          <p>See each product’s strengths and price first, and swap models without leaving Compare.</p>
+          <Notes items={[["Swap products in place", "Dropdown above each column"], ["Show what each product is best for", "Tag and summary before any spec"], ["Price and savings up front"]]} />
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <Pair before={s02b} after={s02a} beforeAlt="The old Compare models popup: product names, ratings and photos" afterAlt="The new Compare: a dropdown above each product, a best-for tag, a one-line summary, price and savings" />
+        </div>
+      </section>
+
+      <section className={`${s.sec} ${s.cont}`}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.eyebrow}>Solution 03</p>
+          <h2>03. Group specs the way people choose</h2>
+          <p>Key specs appear first, with related details organized into tabs.</p>
+          <Notes items={[["Filter to key differences", "One toggle, always in reach"], ["Group specs into six categories", "Key specs open first"], ["Use plain-language labels", "“Full depth,” “With handles”"]]} />
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <Pair before={s03b} after={s03a} beforeAlt="The old spec table: one flat list with N/A values" afterAlt="The new spec table: a Key Differences toggle, six category tabs and plain-language labels" ratio={[480, 760]} />
+        </div>
+      </section>
+
+      <section className={`${s.sec} ${s.cont}`}>
+        <div className={`${s.told} ${s.flow}`}>
+          <p className={s.eyebrow}>Solution 04</p>
+          <h2>04. Show what’s actually different</h2>
+          <p>Matching specs fade back, while differences get plain-language labels.</p>
+          <Notes items={[["Highlight differences", "Apply Key Differences"], ["Label standout specs", "“Only one with a screen,” “Most efficient”"], ["De-emphasize matching specs"]]} />
+        </div>
+        <div className={`${s.shown} ${s.flow}`}>
+          <Pair before={s04b} after={s04a} beforeAlt="The old show-me-only-the-differences view: every row highlighted the same way" afterAlt="The new view with Apply Key Differences on: matching rows fade back, standout specs get labels" ratio={[360, 896]} />
         </div>
       </section>
 

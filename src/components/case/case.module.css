@@ -52,7 +52,7 @@
 
 .block{min-width:0}
 .grid{display:grid;gap:var(--spacing-5)}
-@media (min-width:700px){.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:700px){.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g3{grid-template-columns:repeat(3,minmax(0,1fr))} .g4{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .frame{border-radius:12px;overflow:hidden;background:var(--color-slot)}
 .frame video,.frame img{display:block;width:100%;height:auto}
 .shown .frame video,.shown .frame img{max-height:min(72vh,640px);object-fit:contain}
@@ -133,6 +133,14 @@
 .sites{display:flex;flex-wrap:wrap;gap:var(--spacing-3);margin-bottom:var(--spacing-4)}
 .sites svg{width:var(--spacing-7);height:var(--spacing-7);color:var(--case-accent, var(--color-samsung))}
 .cover img{aspect-ratio:16/9;object-fit:cover}
+.cover img.top{object-position:top}
 /* a numbered finding with a line of explanation under it */
 .find.long span{display:grid;gap:var(--spacing-2)}
 .find.long em{font:400 18px/28px var(--font-sans);font-style:normal;letter-spacing:0;color:var(--color-muted);text-wrap:pretty}
+
+/* before and after: two frames side by side, each named; the after one may be wider */
+.pair{display:grid;gap:var(--spacing-5)}
+@media (min-width:700px){.pair{grid-template-columns:minmax(0,var(--before,1fr)) minmax(0,var(--after,1fr))}}
+.pair .frame img{max-height:none}
+/* a line of small print under figures: where numbers come from */
+.source{font-size:14px;line-height:20px;color:var(--color-muted)}
