@@ -128,21 +128,9 @@ export default function Samsung() {
       </section>
 
       <section id="problem" className={s.sec}>
-        <div className={`${s.told} ${s.flow}`}>
-          <p className={s.name}>The problem</p>
-          <h2>Compare was hard to find, difficult to scan, and missing key information.</h2>
-        </div>
+        <div className={`${s.told} ${s.flow}`}><p className={s.name}>The problem</p></div>
         <div className={`${s.shown} ${s.flow}`}>
-          <div className={`${s.grid} ${s.g3}`}>
-            <div className={s.item}><p className={s.num}>21%</p><p className={s.small}>of Compare sessions included an on-site search</p></div>
-            <div className={s.item}><p className={s.num}>10%</p><p className={s.small}>average scroll depth in the Compare modal</p></div>
-            <div className={s.item}><p className={s.num}>79%</p><p className={s.small}>of Compare page views logged a technical error</p></div>
-          </div>
-          <div className={`${s.block} ${s.grid} ${s.g3}`}>
-            <div className={s.item}><h3>Hard to find</h3><p className={s.small}>No Compare entry point on phone listing or product pages, and each category ran its own version.</p></div>
-            <div className={s.item}><h3>Too dense to scan</h3><p className={s.small}>One long, flat table with no grouping and no highlighted differences.</p></div>
-            <div className={s.item}><h3>Gaps and errors</h3><p className={s.small}>Some specs had missing values or unclear details.</p></div>
-          </div>
+          <p className={s.say}>Compare was hard to find, difficult to scan, and missing key information.</p>
         </div>
       </section>
 
@@ -177,6 +165,11 @@ export default function Samsung() {
             {VOICES.map((v) => (
               <figure key={v} className={s.voice}><blockquote>{v}</blockquote><figcaption>NPS comment</figcaption></figure>
             ))}
+          </div>
+          <div className={`${s.block} ${s.grid} ${s.g3}`}>
+            <div className={s.item}><p className={s.num}>21%</p><p className={s.small}>of Compare sessions included an on-site search</p></div>
+            <div className={s.item}><p className={s.num}>10%</p><p className={s.small}>average scroll depth in the Compare modal</p></div>
+            <div className={s.item}><p className={s.num}>79%</p><p className={s.small}>of Compare page views logged a technical error</p></div>
           </div>
         </div>
       </section>
