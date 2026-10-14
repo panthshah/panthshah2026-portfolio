@@ -63,8 +63,8 @@ export function Story({ sections, children }: { sections: Section[]; children: R
 
 const SIZES = "(min-width: 1024px) 960px, 100vw";
 
-/** One picture on its tile. `look`: "top" crops a tall page to its top, "wide" lets a wide drawing set the height, "paper" drops the frame. */
-export function Shot({ src, alt, caption, look, sizes = SIZES, priority }: { src: StaticImageData; alt: string; caption?: ReactNode; look?: ("top" | "wide" | "paper")[]; sizes?: string; priority?: boolean }) {
+/** One picture on its tile. `look`: "fit" shows a tall page whole in a 4:3 tile, "top" crops a tall page to its top, "wide" lets a wide drawing set the height, "paper" drops the frame. */
+export function Shot({ src, alt, caption, look, sizes = SIZES, priority }: { src: StaticImageData; alt: string; caption?: ReactNode; look?: ("fit" | "top" | "wide" | "paper")[]; sizes?: string; priority?: boolean }) {
   return (
     <figure className={s.fig}>
       <div className={[s.tile, ...(look ?? []).map((l) => s[l])].join(" ")}>
@@ -90,6 +90,26 @@ export function Pair({ label, before, after }: { label: string; before: { src: S
         </div>
       </div>
       <div className={s.tile}><Image key={v} src={pic.src} alt={pic.alt} sizes={SIZES} data-full={pic.src.src} /></div>
+    </figure>
+  );
+}
+
+/** A screen recording on its tile: plays muted on a loop, with a still to show while it loads. Reduced motion shows the still. */
+export function Clip({ src, poster, label, width, height, caption }: { src: string; poster: string; label: string; width: number; height: number; caption?: ReactNode }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <figure className={s.fig}>
+      <div className={s.tile}>
+        <video ref={ref} src={src} poster={poster} width={width} height={height} muted loop playsInline preload="metadata" aria-label={label} />
+      </div>
+      {caption && <figcaption>{caption}</figcaption>}
     </figure>
   );
 }

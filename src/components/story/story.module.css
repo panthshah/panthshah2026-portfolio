@@ -57,6 +57,12 @@
   display: block; max-width: 100%; max-height: calc(56.25cqi - 2 * var(--tile-pad)); width: auto; height: auto; cursor: zoom-in;
   border-radius: 10px; background: #fff; outline: 1px solid rgb(20 20 19 / 0.14); outline-offset: -1px; box-shadow: 0 24px 48px -28px rgb(20 20 19 / 0.45);
 }
+.tile video {
+  display: block; max-width: 100%; max-height: calc(56.25cqi - 2 * var(--tile-pad)); width: auto; height: auto;
+  border-radius: 10px; background: #fff; outline: 1px solid rgb(20 20 19 / 0.14); outline-offset: -1px; box-shadow: 0 24px 48px -28px rgb(20 20 19 / 0.45);
+}
+.tile.fit { aspect-ratio: 4 / 3; }
+.tile.fit img { max-height: calc(75cqi - 2 * var(--tile-pad)); }
 .tile.top img { width: 100%; height: calc(56.25cqi - 2 * var(--tile-pad)); max-height: none; object-fit: cover; object-position: top; }
 .tile.wide { aspect-ratio: auto; }
 .tile.wide img { width: 100%; max-height: none; }

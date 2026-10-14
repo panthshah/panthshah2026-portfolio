@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Pair, Shot, Story, type Section } from "@/components/story/Story";
+import { Clip, Pair, Shot, Story, type Section } from "@/components/story/Story";
 import s from "@/components/story/story.module.css";
 import after from "@/assets/case/samsung/after.png";
-import current from "@/assets/case/samsung/current-compare.png";
 import audit1 from "@/assets/case/samsung/audit-1.png";
 import audit2 from "@/assets/case/samsung/audit-2.png";
 import audit3 from "@/assets/case/samsung/audit-3.png";
@@ -54,7 +53,7 @@ export default function Samsung() {
           <p>Compare shows two or three products side by side. I redesigned it so shoppers could find it and actually read it.</p>
           <p className={s.small}>Sole designer and researcher, with product, engineering, business and CX.</p>
         </div>
-        <Shot src={after} alt="The new Compare page: three refrigerators side by side, each with a best-for tag and price, then key specs" look={["wide"]} priority />
+        <Shot src={after} alt="The new Compare page: three refrigerators side by side, each with a best-for tag and price, then key specs" look={["fit"]} sizes="(min-width: 1024px) 560px, 80vw" priority />
       </header>
 
       <section id="problem">
@@ -62,7 +61,7 @@ export default function Samsung() {
           <p className={s.name}>The problem</p>
           <h2>Compare was hard to find, hard to scan, and missing information.</h2>
         </div>
-        <Shot src={current} alt="The old Compare popup over the refrigerator product finder" caption="Compare before the redesign." />
+        <Clip src="/case/samsung/current-compare.mp4" poster="/case/samsung/current-compare.jpg" width={1920} height={1052} label="Screen recording: opening the old Compare popup from the refrigerator product finder" caption="Compare before the redesign." />
       </section>
 
       <section id="research">
