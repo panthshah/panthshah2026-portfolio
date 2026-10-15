@@ -13,7 +13,7 @@ export type Section = { id: string; label: string };
  * Sections whose id ends in -2, -3… count as part of the section before them in the bar.
  * Any picture opens full size on click.
  */
-export function Story({ sections, children }: { sections: Section[]; children: ReactNode }) {
+export function Story({ sections, accent, children }: { sections: Section[]; accent?: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState("");
   const zoom = useRef<HTMLDialogElement>(null);
@@ -34,7 +34,7 @@ export function Story({ sections, children }: { sections: Section[]; children: R
   useEffect(() => { if (full) zoom.current?.showModal(); }, [full]);
 
   return (
-    <div data-reading={open ? "open" : "closed"} data-story="" className={s.story}
+    <div data-reading={open ? "open" : "closed"} data-story="" className={s.story} style={accent ? ({ "--case-accent": accent } as React.CSSProperties) : undefined}
       onClick={(e) => {
         const img = (e.target as HTMLElement).closest<HTMLImageElement>("img[data-full]");
         if (img) setFull({ src: img.dataset.full!, alt: img.alt });
@@ -63,8 +63,8 @@ export function Story({ sections, children }: { sections: Section[]; children: R
 
 const SIZES = "(min-width: 1024px) 960px, 100vw";
 
-/** One picture on its tile. `look`: "fit" shows a tall page whole in a 4:3 tile, "top" crops a tall page to its top, "wide" lets a wide drawing set the height, "paper" drops the frame. */
-export function Shot({ src, alt, caption, look, sizes = SIZES, priority }: { src: StaticImageData; alt: string; caption?: ReactNode; look?: ("fit" | "top" | "wide" | "paper")[]; sizes?: string; priority?: boolean }) {
+/** One picture on its tile. `look`: "fit" shows a tall page whole in a 4:3 tile, "top" crops a tall page to its top, "wide" lets a wide drawing set the height, "paper" drops the frame, "photo" fills the tile edge to edge. */
+export function Shot({ src, alt, caption, look, sizes = SIZES, priority }: { src: StaticImageData; alt: string; caption?: ReactNode; look?: ("fit" | "top" | "wide" | "paper" | "photo")[]; sizes?: string; priority?: boolean }) {
   return (
     <figure className={s.fig}>
       <div className={[s.tile, ...(look ?? []).map((l) => s[l])].join(" ")}>
@@ -109,6 +109,16 @@ export function Clip({ src, poster, label, width, height, caption }: { src: stri
       <div className={s.tile}>
         <video ref={ref} src={src} poster={poster} width={width} height={height} muted loop playsInline preload="metadata" aria-label={label} />
       </div>
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  );
+}
+
+/** A drawing made for the page (SVG), on a plain tile in the page's colours. */
+export function Drawing({ children, caption }: { children: ReactNode; caption?: ReactNode }) {
+  return (
+    <figure className={s.fig}>
+      <div className={`${s.tile} ${s.paper} ${s.drawing}`}>{children}</div>
       {caption && <figcaption>{caption}</figcaption>}
     </figure>
   );
