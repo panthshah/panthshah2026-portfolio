@@ -114,3 +114,14 @@
   .words h2 { font-size: 20px; }
   .card b { font-size: 28px; }
 }
+
+/* the earlier layout, for comparison: words on the left (they stay put), things to look at on the right. desktop only */
+@media (min-width: 1024px) {
+  .split { max-width: 1200px; }
+  .split .page > section { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--spacing-7); row-gap: var(--gap-block); align-items: start; }
+  .split .page > section > .words { grid-column: 1; grid-row: 1 / span 9; position: sticky; top: calc(var(--spacing-3) + 44px + var(--spacing-6)); }
+  .split .page > section > :not(.words) { grid-column: 2; }
+  .split .page > section > .grid.three { grid-template-columns: minmax(0, 1fr); }
+  .split .page > section > .grid.three .tile { aspect-ratio: 16 / 9; --tile-pad: var(--spacing-5); }
+  .split .page > section > .grid.three .tile img { max-height: calc(56.25cqi - 2 * var(--tile-pad)); }
+}

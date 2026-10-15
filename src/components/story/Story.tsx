@@ -13,7 +13,7 @@ export type Section = { id: string; label: string };
  * Sections whose id ends in -2, -3… count as part of the section before them in the bar.
  * Any picture opens full size on click.
  */
-export function Story({ sections, children }: { sections: Section[]; children: ReactNode }) {
+export function Story({ sections, layout = "story", children }: { sections: Section[]; layout?: "story" | "split"; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState("");
   const zoom = useRef<HTMLDialogElement>(null);
@@ -34,7 +34,7 @@ export function Story({ sections, children }: { sections: Section[]; children: R
   useEffect(() => { if (full) zoom.current?.showModal(); }, [full]);
 
   return (
-    <div data-reading={open ? "open" : "closed"} data-story="" className={s.story}
+    <div data-reading={open ? "open" : "closed"} data-story="" className={layout === "split" ? `${s.story} ${s.split}` : s.story}
       onClick={(e) => {
         const img = (e.target as HTMLElement).closest<HTMLImageElement>("img[data-full]");
         if (img) setFull({ src: img.dataset.full!, alt: img.alt });
